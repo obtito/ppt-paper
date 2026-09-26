@@ -11,7 +11,7 @@
 (function () {
   'use strict';
 
-  var stage = document.querySelector('#q3viewer-panel .v-stage');
+  var stage = document.querySelector('#q4viewer-panel .v-stage');
   var glCanvas = document.getElementById('q3gl');
   var loadEl = document.getElementById('q3load');
   var pctEl = document.getElementById('q3pct');

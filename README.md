@@ -1,40 +1,27 @@
-# 三维拓扑编织 Litz 线 · 电磁优化设计 成果展示
+# braidloss · 结果展示页
 
-研究生数学建模竞赛赛题「三维拓扑编织 Litz 线的电磁优化设计」的成果展示网站(赛题问题四交付物)。
+竞赛项目的单文件网页总览:高频编织/绞合导线交流损耗仿真(MATLAB × COMSOL 6.2)。
 
-**在线访问**:<https://obtito.github.io/ppt-paper/>
+## 使用
 
-## 内容:赛题四问对照
+- 直接双击 `index.html` 在浏览器打开(无外部依赖,可离线);
+- 或本地起服务:`python3 -m http.server -d web 8000` 后访问 http://localhost:8000
 
-| 问题 | 赛题要求 | 本站回应 |
-|---|---|---|
-| 问题一 · 15 分 | 实心导线趋肤效应仿真,理论交叉验证 | δ=147.77 μm 推导;FEM 与 Bessel 解析偏差 0.005%;网格收敛与频率扫描验证 |
-| 问题二 · 20 分 | 设计第一根 Litz 线并对比实心线 | 331 股 × Ø0.14 mm 三步定量设计;三束形等截面对比;不均流机理;MATLAB PEEC 独立交叉验证 |
-| 问题三 · 30 分 | 编织方案系统调优(≥3 种方案对比) | 169 候选搜索;整体扭转/壳层交换/完整换位同约束对比(K:4.760→4.663→1.596);敏感性分析(R²=0.95) |
-| 问题四 · 35 分 | 完美编织探索与成果展示网站 | 本站:484 股完整换位交互式 3D 模型 · 逐站截面动画 · 三拓扑切换 |
+## 主题
 
-## 技术要点
+- 默认**深色**(答辩投屏用),右上角可切换**浅色**(阅读/评审环境);
+- 打印时自动强制浅色(`@media print`),主题选择记忆在 localStorage。
 
-- **单文件、零构建、可离线**:纯静态 HTML/CSS/JS,无 CDN 依赖;
-- **交互式 3D 编织查看器**:three.js(r140 UMD)+ 自研 2D Canvas 软件渲染双后端,WebGL 不可用时自动降级;484 股换位轨迹由 COMSOL 导出的多项式系数实时重建;
-- **双主题**:深色(投屏)/浅色(阅读)一键切换,打印自动浅色;
-- **图表规范**:单色系直接标注、调色板经色觉无障碍校验。
+## 内容与数据来源
 
-## 本地运行
+| 页面区块 | 数据来源 |
+|---|---|
+| KPI / 概览 | `Q1_COMSOL/第一题_COMSOL建模说明.md`、`Q2_*/results_summary.json` |
+| 条形图 | 等铜截面四结构 Rac:实心 15.463 / 六角 15.763 / 圆形 14.900 / 绞合 14.401 mΩ/m |
+| Q2 设计约束 / 机理 / PEEC | `论文/求解思路.md` 问题二节(β 选型、N=331 推导、不均流机理、PEEC 交叉验证数据) |
+| Q3 区块(图+数据) | `未命名文件夹 5/litz_q3/`(final_results.json、topology_control.csv、strand_count_control.csv、figures/)与 `litz_topology_explanation/`;评价指标/三拓扑对比/敏感性按赛题表2与问题三评分项组织 |
+| Q4 区块(判据/拓扑/制造) | `Q3实验数据/litz_topology_explanation/完整换位与有限体积可行性说明.md` + `litz_q3` 仿真数据(K=1.497,η_I≈10⁻¹³) |
+| Q3+Q4 三维查看器 | `data/q3-braid.js`(484 股换位轨迹系数)+ `q3-viewer.js` + `lib/three.min.js`(r140 UMD,经典 script 保证 file:// 可用) |
+| 图片 | `img/*.png` 复制自 `Q1_COMSOL/`、`Q2_Circular_COMSOL/`、`Q2_RegularTwist_COMSOL/`、Q3 figures(COMSOL 原生导出) |
 
-直接打开 `index.html` 即可(需 3D 模型时所有脚本为经典 script 标签,file:// 下可用);
-或 `python3 -m http.server 8000` 后访问 http://localhost:8000。
-
-## 目录结构
-
-```
-index.html      # 单页站点
-q3-viewer.js    # 三维编织查看器(双后端)
-data/           # 484 股换位轨迹系数(render_data 转换)
-lib/            # three.js r140 UMD + OrbitControls
-img/            # COMSOL / MATLAB 原生导出图
-```
-
-## 数据声明
-
-全部数值来自实际求解:有限元数据取自已求解的 .mph 工程(COMSOL Multiphysics 6.2 AC/DC),解析/PEEC 数据来自随论文交付、可直接重跑的 MATLAB 脚本;小数位用于复核,不代表材料参数具有同等实验精度。
+更新数值时改 `index.html` 内对应文本即可;图片替换同名文件。

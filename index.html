@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>编织导线高频损耗仿真 · 结果总览</title>
+<script>
+/* 首绘前锁定主题,避免闪烁:默认深色(答辩投屏),localStorage 记忆切换 */
+(function () {
+  var q = new URLSearchParams(location.search).get('theme');
+  var t = q || localStorage.getItem('braidloss-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+/* ============ 主题令牌(经调色板验证) ============ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page:      #0d0d0d;
+  --surface:   #1a1a19;
+  --ink:       #ffffff;
+  --ink-2:     #c3c2b7;
+  --muted:     #898781;
+  --grid:      #2c2c2a;
+  --hairline:  rgba(255,255,255,0.10);
+  --accent:    #3987e5;   /* series-1 dark */
+  --success:   #0ca30c;   /* delta-down-good (dark) */
+  --page-grid: rgba(255,255,255,0.022);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page:      #f9f9f7;
+  --surface:   #fcfcfb;
+  --ink:       #0b0b0b;
+  --ink-2:     #52514e;
+  --muted:     #898781;
+  --grid:      #e1e0d9;
+  --hairline:  rgba(11,11,11,0.10);
+  --accent:    #256abf;   /* series-1 light */
+  --success:   #006300;   /* delta-down-good (light) */
+  --page-grid: rgba(11,11,11,0.028);
+}
+/* COMSOL 云图底色为浅色,两种主题下都放在统一的浅色"图版"上 */
+:root        { --plate: #fcfcfb; --plate-ink: #0b0b0b; --plate-hair: rgba(11,11,11,0.14); }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  /* 仪器风:极淡的背景网格(仅装饰,不承载数据) */
+  background-image:
+    repeating-linear-gradient(0deg,  var(--page-grid) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, var(--page-grid) 0 1px, transparent 1px 32px);
+}
+.mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+.num  { font-variant-numeric: tabular-nums; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ============ 顶栏 ============ */
+header.site {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--page) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.site-bar { display: flex; align-items: center; gap: 16px; padding: 12px 0; }
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.brand .mark {
+  width: 10px; height: 10px; align-self: center; flex: none;
+  background: var(--accent); box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.brand h1 { font-size: 16px; font-weight: 650; letter-spacing: 0.02em; white-space: nowrap; }
+.brand .code { font-size: 12px; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; }
+nav.jump { margin-left: auto; display: flex; gap: 4px; flex-wrap: wrap; }
+nav.jump a {
+  color: var(--ink-2); text-decoration: none; font-size: 13px;
+  padding: 5px 10px; border-radius: 6px; border: 1px solid transparent;
+}
+nav.jump a:hover { color: var(--ink); border-color: var(--hairline); background: var(--surface); }
+#themeBtn {
+  flex: none; display: inline-flex; align-items: center; gap: 6px;
+  background: var(--surface); color: var(--ink-2);
+  border: 1px solid var(--hairline); border-radius: 6px;
+  font: inherit; font-size: 13px; padding: 5px 12px; cursor: pointer;
+}
+#themeBtn:hover { color: var(--ink); }
+#themeBtn .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+/* ============ 页眉 ============ */
+.hero-head { padding: 56px 0 8px; }
+.eyebrow {
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); display: flex; align-items: center; gap: 8px;
+}
+.eyebrow::before { content: ""; width: 14px; height: 2px; background: var(--accent); }
+.hero-head h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 700; letter-spacing: 0.01em; margin: 10px 0 6px; }
+.hero-head p.sub { color: var(--ink-2); max-width: 62ch; }
+.params {
+  display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding-bottom: 34px;
+}
+.chip {
+  font-size: 12.5px; color: var(--ink-2);
+  border: 1px solid var(--hairline); border-radius: 999px;
+  padding: 3px 12px; background: var(--surface);
+}
+.chip b { color: var(--ink); font-weight: 600; }
+
+/* ============ 区块与面板 ============ */
+section { padding: 34px 0 6px; }
+.sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.sec-head .idx { font-size: 12px; color: var(--accent); letter-spacing: 0.12em; }
+.sec-head h3 { font-size: 20px; font-weight: 680; }
+.sec-head .note { color: var(--muted); font-size: 13px; }
+.panel {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: 12px; padding: 20px 22px; margin-bottom: 18px;
+}
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+.grid-2 > .panel { margin-bottom: 0; }
+.grid-2 { margin-bottom: 18px; }
+
+/* ============ KPI ============ */
+.hero-figure { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+.hero-figure .big { font-size: 56px; font-weight: 700; line-height: 1.05; color: var(--ink); }
+.hero-figure .big small { font-size: 22px; font-weight: 600; color: var(--ink-2); margin-left: 2px; }
+.hero-figure .desc { flex: 1; min-width: 240px; color: var(--ink-2); }
+.hero-figure .desc b { color: var(--ink); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 14px; margin-top: 18px; }
+.tile {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: 12px; padding: 16px 18px;
+}
+.tile .label { font-size: 13px; color: var(--ink-2); }
+.tile .value { font-size: 30px; font-weight: 640; margin-top: 2px; }
+.tile .value small { font-size: 15px; color: var(--ink-2); font-weight: 500; margin-left: 3px; }
+.tile .delta { font-size: 13px; margin-top: 4px; color: var(--success); font-weight: 600; }
+.tile .sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+
+/* ============ 公式 ============ */
+.formula {
+  font-family: "STIX Two Math", "Cambria Math", Georgia, "Times New Roman", serif;
+  font-size: 17px; padding: 6px 2px; overflow-x: auto; color: var(--ink);
+}
+.formula .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; }
+.formula .frac > span { display: block; padding: 0 5px; }
+.formula .frac > span.den { border-top: 1px solid currentColor; }
+.formula .sqrt { display: inline-flex; align-items: stretch; margin: 0 2px; }
+.formula .sqrt::before { content: "√"; align-self: center; }
+.formula .sqrt > span { border-top: 1px solid currentColor; padding: 2px 4px 0 6px; }
+.formula sub, .formula sup { font-size: 0.72em; }
+
+/* ============ 图版 ============ */
+figure.fig { margin: 0; }
+figure.fig .plate {
+  background: var(--plate); border: 1px solid var(--plate-hair);
+  border-radius: 8px; padding: 10px; display: block;
+}
+figure.fig img { display: block; width: 100%; height: auto; border-radius: 4px; }
+figure.fig figcaption {
+  display: flex; gap: 10px; padding: 10px 4px 0; font-size: 13px; color: var(--ink-2);
+}
+figure.fig .fno { color: var(--accent); font-size: 11.5px; letter-spacing: 0.1em; flex: none; padding-top: 2px; }
+
+/* ============ 条形图(单一系列,直接标注) ============ */
+.barchart { position: relative; }
+.bc-grid { position: absolute; inset: 0 0 30px 148px; pointer-events: none; }
+.bc-grid i { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--grid); }
+.bc-grid i.tick-0 { background: var(--grid); }
+.bar-row {
+  position: relative; display: grid; grid-template-columns: 148px 1fr; align-items: center;
+  height: 44px; margin: 10px 0; outline: none; cursor: default;
+}
+.bar-row:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.bar-row .blabel { font-size: 13.5px; color: var(--ink-2); padding-right: 14px; text-align: right; line-height: 1.35; }
+.bar-row .blabel b { color: var(--ink); font-weight: 600; display: block; font-size: 13.5px; }
+.bar-row .blabel .bsub { font-size: 12px; color: var(--muted); }
+.bar-row .track { position: relative; height: 24px; }
+.bar-row .bar {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: var(--accent);
+  border-radius: 0 4px 4px 0;            /* 数据端 4px 圆角,基线端直角 */
+}
+.bar-row .bval {
+  position: absolute; left: calc(var(--w) + 1%); top: 50%; transform: translateY(-50%);
+  font-size: 13px; color: var(--ink); white-space: nowrap; padding-left: 8px;
+}
+.bar-row .bval .ratio { color: var(--muted); font-size: 12px; margin-left: 6px; }
+.bar-row .badge {
+  display: inline-block; margin-left: 8px; padding: 0 7px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; color: var(--page); background: var(--accent);
+  vertical-align: 1px; letter-spacing: 0.04em;
+}
+.bc-axis { display: grid; grid-template-columns: 148px 1fr; color: var(--muted); font-size: 12px; }
+.bc-axis .ax { position: relative; height: 18px; }
+.bc-axis .ax span { position: absolute; transform: translateX(-50%); }
+#tip {
+  position: fixed; z-index: 99; display: none; pointer-events: none;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--hairline); border-radius: 8px;
+  padding: 10px 12px; font-size: 12.5px; line-height: 1.55; min-width: 200px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+}
+#tip .t-name { font-weight: 650; margin-bottom: 2px; }
+#tip .t-row { display: flex; justify-content: space-between; gap: 18px; color: var(--ink-2); }
+#tip .t-row b { color: var(--ink); font-weight: 600; }
+#tip .t-delta { color: var(--success); font-weight: 600; margin-top: 3px; }
+
+/* ============ 表格 ============ */
+table.data { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+table.data th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--grid);
+}
+table.data td { padding: 8px 10px; border-bottom: 1px solid var(--grid); color: var(--ink-2); }
+table.data td.v { text-align: right; color: var(--ink); }
+table.data tr:last-child td { border-bottom: none; }
+table.data td.good { color: var(--success); font-weight: 600; }
+
+/* ============ 结论条 ============ */
+.concl {
+  border-left: 3px solid var(--accent);
+  background: var(--surface); border-radius: 0 12px 12px 0;
+  padding: 16px 20px; margin-bottom: 18px; color: var(--ink-2);
+}
+.concl b { color: var(--ink); }
+.concl .hi { color: var(--success); font-weight: 700; }
+
+footer.site { padding: 30px 0 46px; color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--hairline); margin-top: 40px; }
+
+/* ============ 三维查看器 ============ */
+.v-wrap { display: flex; gap: 16px; align-items: stretch; }
+.v-stage {
+  position: relative; flex: 1; min-width: 0; height: 500px;
+  border: 1px solid var(--hairline); border-radius: 8px; overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 40%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%),
+    var(--page);
+}
+.v-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.v-load {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 12px;
+  background: var(--page); color: var(--muted); font-size: 13px; letter-spacing: 0.08em;
+}
+.v-load b { color: var(--accent); }
+.v-mode {
+  position: absolute; top: 8px; right: 8px; z-index: 3;
+  font-size: 11px; letter-spacing: 0.08em; color: var(--muted);
+  background: color-mix(in srgb, var(--page) 80%, transparent);
+  border: 1px solid var(--hairline); border-radius: 5px; padding: 2px 8px;
+  pointer-events: none;
+}
+.v-fail {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: var(--page); color: var(--ink-2); font-size: 13.5px; padding: 30px; text-align: center;
+}
+.v-side { flex: none; width: 288px; display: flex; flex-direction: column; gap: 6px; }
+.v-side canvas {
+  width: 100%; aspect-ratio: 1; border: 1px solid var(--hairline); border-radius: 8px;
+  background: var(--surface); display: block;
+}
+.v-sec-label { font-size: 12px; color: var(--muted); text-align: center; }
+.v-sec-label b { color: var(--ink); }
+.v-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+.vbtn {
+  background: var(--surface); color: var(--ink-2);
+  border: 1px solid var(--hairline); border-radius: 6px;
+  font: inherit; font-size: 13px; padding: 6px 12px; cursor: pointer;
+}
+.vbtn:hover { color: var(--ink); }
+.vbtn.on { color: var(--page); background: var(--accent); border-color: var(--accent); }
+.vsel { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); }
+.vsel select {
+  font: inherit; font-size: 13px; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--hairline); border-radius: 6px; padding: 5px 8px;
+}
+.vsel input[type="range"] { accent-color: var(--accent); }
+
+@media (max-width: 900px) {
+  .v-wrap { flex-direction: column; }
+  .v-side { width: 100%; }
+  .v-stage { height: 380px; }
+}
+footer.site p + p { margin-top: 4px; }
+
+/* ============ 打印:强制浅色、隐藏交互件 ============ */
+@media print {
+  :root[data-theme="dark"] {
+    color-scheme: light;
+    --page: #ffffff; --surface: #ffffff; --ink: #0b0b0b; --ink-2: #52514e;
+    --grid: #e1e0d9; --hairline: rgba(11,11,11,0.14); --accent: #256abf; --success: #006300;
+    --page-grid: transparent;
+  }
+  header.site, #themeBtn, #tip { display: none !important; }
+  .panel, .tile, figure.fig .plate { break-inside: avoid; }
+  body { background-image: none; }
+}
+
+@media (max-width: 640px) {
+  .bar-row, .bc-axis { grid-template-columns: 108px 1fr; }
+  .bc-grid { inset: 0 0 30px 108px; }
+  .bar-row .blabel { padding-right: 8px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap site-bar">
+    <div class="brand">
+      <span class="mark"></span>
+      <h1>编织导线高频损耗仿真</h1>
+      <span class="code mono">braidloss</span>
+    </div>
+    <nav class="jump">
+      <a href="#overview">概览</a>
+      <a href="#q1">问题一</a>
+      <a href="#q2">问题二·束形</a>
+      <a href="#twist">问题二·绞合</a>
+      <a href="#q3">问题三</a>
+      <a href="#verify">验证</a>
+    </nav>
+    <button id="themeBtn" type="button" aria-label="切换深浅主题">
+      <span class="dot"></span><span id="themeBtnText">深色</span>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ================= 页眉 ================= -->
+  <div class="hero-head">
+    <div class="eyebrow">MATLAB 解析 × COMSOL 6.2 AC/DC · 频域有限元</div>
+    <h2>高频交流损耗:从单线趋肤效应到 484 股完整换位编织</h2>
+    <p class="sub">
+      全部数值来自实际求解:有限元数据取自已求解的 <span class="mono">.mph</span> 工程,解析 / PEEC
+      数据来自随文档交付、可直接重跑的 MATLAB 脚本;两侧以 CSV 数据接口互校。
+    </p>
+    <div class="params" id="paramStrip">
+      <span class="chip mono">σ = <b>5.8×10⁷ S/m</b></span>
+      <span class="chip mono">f = <b>200 kHz</b></span>
+      <span class="chip mono">I = <b>20 A (rms)</b></span>
+      <span class="chip mono">L = <b>1 m</b></span>
+      <span class="chip mono">T = <b>20 ℃</b></span>
+      <span class="chip mono">μ = μ₀</span>
+      <span class="chip mono">铜截面 ≈ <b>5.10 mm²</b>(Q2 起 J<sub>dc</sub> = 3.93 A/mm² ≤ 4)</span>
+    </div>
+  </div>
+
+  <!-- ================= 概览 ================= -->
+  <section id="overview">
+    <div class="sec-head">
+      <span class="idx">00</span><h3>结果概览</h3>
+      <span class="note">统一工况 · 等铜截面对比</span>
+    </div>
+
+    <div class="panel hero-figure">
+      <div class="big num">−6.87<small>%</small></div>
+      <div class="desc">
+        <b>规则绞合(节距 40 mm)相对等截面实心铜线的交流电阻降幅</b>;
+        相对圆形分层束再降 <b>3.35%</b>。绞合通过周期换位均衡各股电流,
+        在束级趋肤效应主导的频段持续获益。
+      </div>
+    </div>
+
+    <div class="tiles">
+      <div class="tile">
+        <div class="label">趋肤深度 δ(200 kHz)</div>
+        <div class="value num">147.77<small>μm</small></div>
+        <div class="sub">D=2 mm 实心线,a/δ = 6.767</div>
+      </div>
+      <div class="tile">
+        <div class="label">Q1 实心线 Rac / Rdc</div>
+        <div class="value num">3.647</div>
+        <div class="sub">Rac = 20.016 mΩ/m · 8.006 W/m</div>
+      </div>
+      <div class="tile">
+        <div class="label">Q2 圆形分层束 Rac / Rdc</div>
+        <div class="value num">4.403</div>
+        <div class="delta">▼ vs 实心 −3.65%</div>
+        <div class="sub">331 股 · Rac = 14.900 mΩ/m</div>
+      </div>
+      <div class="tile">
+        <div class="label">Q2 规则绞合 Rac / Rdc</div>
+        <div class="value num">4.193</div>
+        <div class="delta">▼ vs 实心 −6.87% · vs 圆形 −3.35%</div>
+        <div class="sub">节距 40 mm · Rac = 14.401 mΩ/m</div>
+      </div>
+      <div class="tile">
+        <div class="label">Q3 完整换位编织 Rac / Rdc</div>
+        <div class="value num">1.497</div>
+        <div class="delta">▼ vs 初始扭转方案 −68.6%</div>
+        <div class="sub">484 股 · 周期 500 mm · 1.759 W/m</div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:18px;">
+      <div class="eyebrow" style="margin-bottom:6px;">赛题四问 · 本站对照(15 / 20 / 30 / 35 分)</div>
+      <table class="data">
+        <thead><tr><th style="width:16%">问题</th><th style="width:36%">赛题要求</th><th>本站回应</th></tr></thead>
+        <tbody>
+          <tr><td>问题一 · 15 分</td><td>走通趋肤效应仿真流程,理论交叉验证</td><td>FEM 与 Bessel 解析偏差 0.005% · 网格收敛与频扫验证(FIG 01–02)</td></tr>
+          <tr><td>问题二 · 20 分</td><td>设计第一根 Litz 线并对比实心线</td><td>331 股三步定量设计链 · 三束形等截面对比 · 不均流机理与 PEEC 交叉验证</td></tr>
+          <tr><td>问题三 · 30 分</td><td>编织方案系统调优,≥3 种方案对比</td><td>169 候选搜索 · 三拓扑同约束对比 · 敏感性分析(R²=0.95)</td></tr>
+          <tr><td>问题四 · 35 分</td><td>完美编织探索与成果展示网站</td><td>本站即交付物:交互式 3D 编织模型 · 逐站截面动画 · 双主题可打印</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= 问题一 ================= -->
+  <section id="q1">
+    <div class="sec-head">
+      <span class="idx">01</span><h3>问题一 · 实心导线趋肤效应</h3>
+      <span class="note">对应赛题任务:δ 推导 → 建模 → J(r)/Rac → 验证与网格收敛</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="eyebrow">理论模型</div>
+        <div class="formula">
+          δ = <span class="sqrt"><span><span class="frac"><span>2</span><span class="den">ωμσ</span></span></span></span>
+          = <span class="sqrt"><span><span class="frac"><span>ρ</span><span class="den">πfμ</span></span></span></span>
+          = 147.7717&nbsp;μm
+        </div>
+        <div class="formula">
+          J<sub>z</sub>(r) = C·J<sub>0</sub>(kr),&nbsp; k = (1−j)/δ,&nbsp;
+          C = <span class="frac"><span>Ik</span><span class="den">2πa·J<sub>1</sub>(ka)</span></span>
+        </div>
+        <p style="color:var(--ink-2); font-size:13.5px; margin-top:8px;">
+          导体内轴向电流密度满足 Bessel 方程;MATLAB 在 N<sub>r</sub>=4001 径向网格上计算
+          |J<sub>z</sub>(r)|,与 COMSOL 二维轴对称 FEM(Magnetic Field Formulation,2313 DOF)
+          在同一图上对照。
+        </p>
+      </div>
+      <div class="panel">
+        <div class="eyebrow">有限元 vs 解析 · 偏差</div>
+        <table class="data">
+          <thead><tr><th>对照量(归一化到表面值)</th><th style="text-align:right">最大偏差</th></tr></thead>
+          <tbody>
+            <tr><td>幅值 |J|:COMSOL FEM vs MATLAB 解析</td><td class="v num">0.0050%</td></tr>
+            <tr><td>复数 J<sub>z</sub>(实部+虚部)</td><td class="v num">0.0394%</td></tr>
+            <tr><td>电流积分实部(电流守恒)</td><td class="v num">20.000000000 A</td></tr>
+            <tr><td>表面 / 轴心电流密度有效值</td><td class="v num">31.60 / 0.279 A/mm²</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q1-cross.png" alt="Q1 COMSOL 截面电流密度云图" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 01</span>COMSOL 原生截面云图:电流集中于表面 δ 层,轴心趋于零。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q1-radial.png" alt="Q1 径向电流密度分布与解析解校验" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 02</span>径向电流密度分布:FEM 与 Bessel 解析解在同一图上重合校验。</figcaption>
+      </figure>
+    </div>
+
+    <div class="concl">
+      问题一作为<b>流程基准</b>:2 mm 导线在 20 A 下 J<sub>dc</sub>=6.366 A/mm² 超出统一工况 4 A/mm²
+      约束,题目明确指定的直径与电流予以保留;自问题二起按 ≥5 mm² 铜截面设计
+      (等截面实心线直径约 2.523 mm)。
+    </div>
+  </section>
+
+  <!-- ================= 问题二 · 结构对比 ================= -->
+  <section id="q2">
+    <div class="sec-head">
+      <span class="idx">02</span><h3>问题二 · 设计第一根 Litz 线</h3>
+      <span class="note">331 股 × Ø0.14 mm · 等铜截面 5.095 mm² · 三种束形对比</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="eyebrow">设计约束与选型推导</div>
+        <div class="formula">
+          β = <span class="frac"><span>d</span><span class="den">δ</span></span> = 0.9474 &lt; 1
+          &nbsp;⇒&nbsp; 孤立单丝 R<sub>ac</sub>/R<sub>dc</sub> = 1.001048
+        </div>
+        <div class="formula">
+          N<sub>min</sub> = ⌈<span class="frac"><span>A<sub>Cu,min</sub></span><span class="den">πd²/4</span></span>⌉ = 325,
+          &nbsp; N = 1 + 6·Σ<sub>k=1…10</sub> k = 331
+        </div>
+        <table class="data">
+          <thead><tr><th>参数</th><th style="text-align:right">采用值</th><th>依据</th></tr></thead>
+          <tbody>
+            <tr><td>裸铜丝径 d</td><td class="v num">0.14 mm</td><td>β&lt;1,单丝趋肤可忽略</td></tr>
+            <tr><td>相邻中心距 p</td><td class="v num">0.15 mm</td><td>铜表面间隔 10 μm</td></tr>
+            <tr><td>总铜截面 A<sub>Cu</sub></td><td class="v num">5.0953 mm²</td><td>≥5 mm² 温升约束</td></tr>
+            <tr><td>J<sub>dc</sub></td><td class="v num">3.925 A/mm²</td><td>&lt;4 A/mm² ✓(直流约束)</td></tr>
+            <tr><td>裸铜包络直径</td><td class="v num">3.14 mm</td><td>2×10p+d,不含护套</td></tr>
+            <tr><td>R<sub>dc</sub></td><td class="v num">3.3837 mΩ/m</td><td>1/(σA<sub>Cu</sub>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="eyebrow">不均流机理</div>
+        <div class="formula">
+          V = Z<sub>int</sub> Ĩ<sub>i</sub> + jω Σ<sub>j</sub> M<sub>ij</sub> Ĩ<sub>j</sub>
+          <span style="font-size:0.8em; color:var(--muted)">(两端并联共压)</span>
+        </div>
+        <p style="color:var(--ink-2); font-size:13.5px; margin:6px 0 4px;">
+          各股位置不同 → 磁链与互感耦合不同:<b style="color:var(--ink)">外层股</b>链过的束内磁通少、串联电感小,
+          分走更多电流;<b style="color:var(--ink)">中心股</b>被其余股磁场包围,感应涡流抵消其净电流。
+          未换位时这种差异沿全长保持不变——
+        </p>
+        <table class="data">
+          <tbody>
+            <tr><td>理想均流(20 A / 331 股)</td><td class="v num">60.42 mA</td></tr>
+            <tr><td>外层股实际电流 / 中心股</td><td class="v num">258.6 / 0.54 mA</td></tr>
+            <tr><td>60 根外层股承担的损耗占比</td><td class="v num">80.75%</td></tr>
+            <tr><td>电流不均衡度 η<sub>I</sub>(圆形 / 绞合)</td><td class="v num">338% / 321%</td></tr>
+            <tr><td>股间分配失衡超额损耗</td><td class="v num">4.21 W/m ≈ 3× 直流基准</td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
+          绞合使中心股电流回升至 3.68 mA,但 Rac 仅降 3.35%——周向换位对均流的贡献
+          <b style="color:var(--ink)">远小于径向换位</b>,这正是问题三要解决的问题。
+        </p>
+      </div>
+    </div>
+
+    <div class="panel barchart">
+      <div class="eyebrow" style="margin-bottom:6px;">交流电阻 Rac(200 kHz,每米)</div>
+      <div class="bc-grid" aria-hidden="true">
+        <i class="tick-0" style="left:0%"></i><i style="left:21.5%"></i><i style="left:43%"></i><i style="left:64.5%"></i><i style="left:86%"></i>
+      </div>
+      <div class="bar-row" tabindex="0" data-name="实心等截面"
+           data-rac="15.463" data-ratio="4.570" data-loss="6.185" data-delta="0">
+        <div class="blabel"><b>实心等截面</b><span class="bsub">Ø2.523 mm · R/R₀ 4.570</span></div>
+        <div class="track"><div class="bar" style="--w:83.1%; width:83.1%"></div>
+          <div class="bval"><span class="num">15.463</span></div></div>
+      </div>
+      <div class="bar-row" tabindex="0" data-name="六角密排束"
+           data-rac="15.763" data-ratio="4.658" data-loss="6.305" data-delta="1.94">
+        <div class="blabel"><b>六角密排束</b><span class="bsub">静态排布 · R/R₀ 4.658</span></div>
+        <div class="track"><div class="bar" style="--w:84.7%; width:84.7%"></div>
+          <div class="bval"><span class="num">15.763</span></div></div>
+      </div>
+      <div class="bar-row" tabindex="0" data-name="圆形分层束"
+           data-rac="14.900" data-ratio="4.403" data-loss="5.960" data-delta="-3.65">
+        <div class="blabel"><b>圆形分层束</b><span class="bsub">同心分层 · R/R₀ 4.403</span></div>
+        <div class="track"><div class="bar" style="--w:80.1%; width:80.1%"></div>
+          <div class="bval"><span class="num">14.900</span></div></div>
+      </div>
+      <div class="bar-row" tabindex="0" data-name="规则绞合"
+           data-rac="14.401" data-ratio="4.193" data-loss="5.760" data-delta="-6.87">
+        <div class="blabel"><b>规则绞合</b><span class="bsub">节距 40 mm · R/R₀ 4.193</span></div>
+        <div class="track"><div class="bar" style="--w:77.4%; width:77.4%"></div>
+          <div class="bval"><span class="num">14.401</span><span class="badge">✓ 推荐</span></div></div>
+      </div>
+      <div class="bc-axis"><span></span><div class="ax">
+        <span style="left:0%">0</span><span style="left:21.5%">4</span><span style="left:43%">8</span>
+        <span style="left:64.5%">12</span><span style="left:86%">16 mΩ/m</span>
+      </div></div>
+    </div>
+
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q2-layout.png" alt="331 股圆形分层排布几何" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 03</span>331 股 Ø0.14 mm 圆形分层排布:裸铜包络 Ø3.14 mm,最小铜间隙 10 μm。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q2-j.png" alt="圆形束 COMSOL 电流密度分布" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 04</span>束级趋肤效应:外层股均流 258.6 mA,中心股仅 0.54 mA;外层损耗占 80.8%。</figcaption>
+      </figure>
+    </div>
+
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q2-current.png" alt="股电流分布对比:10 Hz 均流与 200 kHz 失衡" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 05</span>股电流分布:10 Hz 下各股均流 60.4 mA;200 kHz 下外层股达 258 mA、中心股近乎为零(圆形与六角两种排布对照)。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q2-freq.png" alt="频率扫描:三结构 Rac/Rdc 对比" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 06</span>频率特性(10 Hz – 1 MHz):束级趋肤效应随频率增强,高频段分层束相对实心线的优势持续扩大。</figcaption>
+      </figure>
+    </div>
+
+    <div class="panel">
+      <div class="eyebrow" style="margin-bottom:6px;">MATLAB PEEC 独立交叉验证</div>
+      <p style="color:var(--ink-2); font-size:13.5px; margin-bottom:10px;">
+        与 COMSOL 同构但完全独立的快速模型:每股一个复电流变量,内阻抗用 Bessel 精确式,
+        外部互感用 ln(1/d<sub>ij</sub>) 细丝形式,并联共压 + 总电流约束;绞合另加线长因子、
+        输运约束与互感方向余弦三项修正。
+      </p>
+      <table class="data">
+        <thead><tr><th>校验项</th><th style="text-align:right">PEEC</th><th style="text-align:right">COMSOL</th><th>复现度</th></tr></thead>
+        <tbody>
+          <tr><td>孤立单丝 R<sub>ac</sub>/R<sub>dc</sub></td><td class="v num">1.001048</td><td class="v num">1.001048</td><td>逐位一致</td></tr>
+          <tr><td>ΔR<sub>ac</sub>(圆形 − 六角)</td><td class="v num">−0.790 mΩ/m</td><td class="v num">−0.863 mΩ/m</td><td class="good">91.5%</td></tr>
+          <tr><td>ΔR<sub>ac</sub>(绞合 − 圆形)</td><td class="v num">−0.321 mΩ/m</td><td class="v num">−0.498 mΩ/m</td><td>64.5%</td></tr>
+          <tr><td>R<sub>ac</sub> 绝对水平</td><td class="v num">系统性低 2.5–3.9%</td><td class="v num">基准</td><td>缺口 = 未解析的股内邻近损耗(0.21–0.47 W/m)</td></tr>
+        </tbody>
+      </table>
+      <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
+        相对比较精度远高于绝对精度——PEEC 适合问题三的参数扫描与方案排序,最优点再交 COMSOL 精算。
+      </p>
+    </div>
+
+    <div class="concl">
+      等铜截面下,静态六角密排的股间邻近效应使其 Rac 甚至<b>略高于实心线</b>(+1.9%);
+      <b>圆形分层</b>与<b>规则绞合</b>则分别降低 <span class="hi">3.65%</span> 与 <span class="hi">6.87%</span>。
+      股电流失衡(理想均流 60.4 mA)造成的超额损耗占束总损耗的主要部分,绞合换位正是针对它的解法。
+    </div>
+  </section>
+
+  <!-- ================= 问题二 · 规则绞合 ================= -->
+  <section id="twist">
+    <div class="sec-head">
+      <span class="idx">03</span><h3>问题二 · 规则绞合(推荐方案)</h3>
+      <span class="note">完整 1 m 三维几何 · 螺旋缩减 · 三分量矢量位 · 精确绝缘间隙</span>
+    </div>
+
+    <figure class="fig panel" style="margin-bottom:18px;">
+      <span class="plate"><img src="img/q2-twist-geo.png" alt="螺旋几何与坐标缩减说明" loading="lazy"></span>
+      <figcaption><span class="fno mono">FIG 07</span>螺旋几何与建模方法:绞合结构经螺旋坐标缩减后以三分量矢量位求解,绝缘间隙精确保持(最小物理铜间隙 9.97 μm)。</figcaption>
+    </figure>
+
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q2-twist-3d.png" alt="规则绞合三维几何" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 08</span>规则绞合三维几何:节距 40 mm,每轴向米 25 圈,外层螺旋角 13.26°。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q2-twist-j.png" alt="绞合结构 COMSOL 电流密度分布" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 09</span>绞合后电流密度分布:外层损耗占比降至 79.7%,各股电流经换位趋于均衡。</figcaption>
+      </figure>
+    </div>
+
+    <div class="panel">
+      <div class="eyebrow" style="margin-bottom:6px;">关键参数与结果</div>
+      <table class="data">
+        <thead><tr><th>量</th><th style="text-align:right">数值</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>绞合节距</td><td class="v num">40.0 mm</td><td>每轴向米 25 圈,绞率 157.08 /m</td></tr>
+          <tr><td>外层螺旋角</td><td class="v num">13.258°</td><td>外层每股长度 1.0274 m(每轴向米)</td></tr>
+          <tr><td>铜体积增量</td><td class="v num">+1.507%</td><td>绞合使每股走螺旋路径,铜量略增</td></tr>
+          <tr><td>三维几何工程</td><td class="v">完整 1 m + 单节距</td><td>Q2_RegularTwist3D_OnePitch.mph,331 股独立螺旋精确建模</td></tr>
+          <tr><td>Rdc / Rac</td><td class="v num">3.4345 / 14.4012 mΩ/m</td><td>按轴向米计</td></tr>
+          <tr><td>Rac / Rdc</td><td class="v num">4.1931</td><td class="good">vs 圆形 −3.35% · vs 实心 −6.87%</td></tr>
+          <tr><td>每米铜损</td><td class="v num">5.7605 W/m</td><td>I = 20 A rms</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= 问题三 ================= -->
+  <section id="q3">
+    <div class="sec-head">
+      <span class="idx">04</span><h3>问题三 · 编织方案仿真调优</h3>
+      <span class="note">三拓扑同约束对比 · 169 候选搜索 · 敏感性分析 · 准三维(截面 FEM + 三维换位电路)</span>
+    </div>
+
+    <div class="tiles">
+      <div class="tile">
+        <div class="label">初始整体扭转 N=400</div>
+        <div class="value num">4.769<small>R/R₀</small></div>
+        <div class="sub">周期 100 mm · 5.523 W/m</div>
+      </div>
+      <div class="tile">
+        <div class="label">推荐完整换位 N=484</div>
+        <div class="value num">1.497<small>R/R₀</small></div>
+        <div class="delta">▼ 电阻比降低 68.61%</div>
+        <div class="sub">周期 500 mm · Rac 4.398 mΩ/m</div>
+      </div>
+      <div class="tile">
+        <div class="label">每米铜耗</div>
+        <div class="value num">1.759<small>W/m</small></div>
+        <div class="delta">▼ 降低 68.15%(vs 5.523)</div>
+        <div class="sub">铜截面 6 mm² · Jdc = 3.333 A/mm²</div>
+      </div>
+      <div class="tile">
+        <div class="label">几何可行性余量</div>
+        <div class="value num">14.15<small>°</small></div>
+        <div class="sub">最大编织角;最小间隙 23.5 μm,弯曲半径 15.97 d,路径增长 2.23%</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:6px;">评价指标体系(按赛题表 2 定义)</div>
+        <table class="data">
+          <thead><tr><th>指标</th><th>定义</th><th style="text-align:right">本题结果</th></tr></thead>
+          <tbody>
+            <tr><td>交直流电阻比 R<sub>ac</sub>/R<sub>dc</sub></td><td>核心目标,越接近 1 越好</td><td class="v num">4.769 → 1.497</td></tr>
+            <tr><td>均流偏差 η<sub>I</sub> = max|I<sub>i</sub>−Ī|/Ī</td><td>换位公平性</td><td class="v num">909% → ≈0</td></tr>
+            <tr><td>每米损耗 P = I²R<sub>ac</sub></td><td>工程发热量</td><td class="v num">5.52 → 1.76 W/m</td></tr>
+            <tr><td>换位充分性</td><td>各股径向壳层停留分布 vs 面积加权均匀分布</td><td class="v num">问题四判据方向</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:6px;">三种换位拓扑 · 同约束对比(10 分核心项)</div>
+        <p style="color:var(--muted); font-size:12.5px; margin-bottom:6px;">
+          变量全部受控:N=400、周期 0.25 m、等铜截面 6 mm²、200 kHz / 20 A。
+        </p>
+        <table class="data">
+          <thead><tr><th>拓扑</th><th>换位方式</th><th style="text-align:right">R<sub>ac</sub>/R<sub>dc</sub></th><th style="text-align:right">P (W/m)</th><th style="text-align:right">η<sub>I</sub></th></tr></thead>
+          <tbody>
+            <tr><td>整体扭转</td><td>仅周向旋转,径向位置固定</td><td class="v num">4.760</td><td class="v num">5.478</td><td class="v num">909%</td></tr>
+            <tr><td>壳层交换</td><td>仅在环带内换位</td><td class="v num">4.663</td><td class="v num">5.368</td><td class="v num">358%</td></tr>
+            <tr><td>完整换位</td><td>遍历全部槽位</td><td class="v num">1.596</td><td class="v num">1.967</td><td class="v num">≈0</td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
+          整体扭转 → 壳层交换仅降 <b style="color:var(--ink)">2.0%</b>,壳层交换 → 完整换位再降
+          <b style="color:var(--ink)">65.7%</b>——换位<b style="color:var(--ink)">彻底程度</b>而非幅度主导性能。
+        </p>
+      </div>
+    </div>
+
+    <div class="panel" id="q3viewer-panel">
+      <div class="eyebrow" style="margin-bottom:8px;">交互式三维模型 · 484 股完整换位(推荐方案,可视化网格非 FEM)</div>
+      <div class="v-wrap">
+        <div class="v-stage">
+          <canvas id="q3gl"></canvas>
+          <span id="q3mode" class="v-mode mono" title="">WebGL</span>
+          <div id="q3load" class="v-load"><span class="mono">构建 484 股几何</span><b id="q3pct" class="mono">0%</b></div>
+        </div>
+        <aside class="v-side">
+          <canvas id="q3sec" width="280" height="280"></canvas>
+          <div class="v-sec-label mono">截面 z = <b id="q3z">8.0</b> mm</div>
+        </aside>
+      </div>
+      <div class="v-ctl">
+        <button type="button" class="vbtn on" id="q3-rotate">⟳ 自转</button>
+        <button type="button" class="vbtn" id="q3-play">▶ 逐站扫描</button>
+        <button type="button" class="vbtn" id="q3-close">特写</button>
+        <button type="button" class="vbtn" id="q3-full">全长</button>
+        <label class="vsel">拓扑
+          <select id="q3-topo">
+            <option value="full" selected>完整换位(实测)</option>
+            <option value="rigid">整体扭转(演示)</option>
+            <option value="shell">壳层交换(演示)</option>
+          </select>
+        </label>
+        <label class="vsel">着色
+          <select id="q3-color">
+            <option value="slot" selected>槽位渐变</option>
+            <option value="copper">纯铜</option>
+            <option value="pair">高亮换位对 #462/#463</option>
+            <option value="focus">透视 · 高亮 8 股</option>
+          </select>
+        </label>
+        <label class="vsel">自转速度
+          <select id="q3-rotspeed">
+            <option value="0">停</option>
+            <option value="0.25">0.25×</option>
+            <option value="0.5">0.5×</option>
+            <option value="1" selected>1×</option>
+            <option value="2">2×</option>
+            <option value="4">4×</option>
+          </select>
+        </label>
+        <label class="vsel">扫描速度
+          <select id="q3-scanspeed">
+            <option value="0.25">0.25×</option>
+            <option value="0.5">0.5×</option>
+            <option value="1" selected>1×</option>
+            <option value="2">2×</option>
+            <option value="4">4×</option>
+            <option value="8">8×</option>
+          </select>
+        </label>
+        <label class="vsel" style="flex:1; min-width:200px;">轴向位置
+          <input type="range" id="q3-slider" min="0" max="500" step="1" value="8" style="width:100%;">
+        </label>
+      </div>
+      <p style="color:var(--muted); font-size:12.5px; margin:8px 0 0;">
+        拖拽旋转 · 滚轮缩放 · 右键平移。「拓扑」可在三种换位方案间切换:<b style="color:var(--ink)">完整换位</b>为
+        COMSOL 实测 484 股轨迹;<b style="color:var(--ink)">整体扭转 / 壳层交换</b>为同一槽位布局上的参数化演示——
+        前者每股径向位置固定、只随整体旋转,后者每股仅在所属壳层内轮换。「逐站扫描」沿 500 mm 周期推进,右侧同步显示各站位截面。
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-principle.png" alt="完整换位原理示意" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 10</span>完整换位原理:每股沿轴向依次经过全部槽位,获得相同的磁场履历。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-topology.png" alt="三种换位拓扑对比" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 11</span>三种换位拓扑对比:整体扭转(径向位置不变)→ 壳层交换(环带内换位)→ 完整换位(遍历全部槽位),均流偏差 η<sub>I</sub> 由 909% 降至 ≈0。</figcaption>
+      </figure>
+    </div>
+
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-search.png" alt="169 候选参数搜索记录" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 12</span>169 次候选搜索(含不可行拒绝记录):周期并非越短越好——短周期增大角度与弯曲而被拒。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-controlled.png" alt="受控对比与敏感性分析" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 13</span>受控对比与敏感性分析:R<sub>ac</sub>/R<sub>dc</sub> 与平均路径增长强相关(R²=0.95),与编织角(R²=0.012)、弯曲半径(R²=0.093)基本无关;离散化复核偏差 0.07%。</figcaption>
+      </figure>
+    </div>
+
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-before-after.png" alt="COMSOL 优化前后截面对比" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 14</span>COMSOL 截面对比:初始整体扭转 vs 推荐完整换位的电流分布与损耗密度。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-current-loss.png" alt="股电流与损耗对比" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 15</span>优化前后股电流均衡度与各股损耗分布:完整换位后电流近乎均分。</figcaption>
+      </figure>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:6px;">股数对照与参数敏感性</div>
+        <table class="data">
+          <thead><tr><th>N</th><th style="text-align:right">拓扑</th><th style="text-align:right">Rac/Rdc</th><th style="text-align:right">每米铜损</th></tr></thead>
+          <tbody>
+            <tr><td>324</td><td class="v">完整换位 · 周期 0.5 m</td><td class="v num">1.728</td><td class="v num">2.017 W/m</td></tr>
+            <tr><td>400</td><td class="v">完整换位 · 周期 0.5 m</td><td class="v num">1.597</td><td class="v num">1.869 W/m</td></tr>
+            <tr><td>484</td><td class="v">完整换位 · 周期 0.5 m</td><td class="v num">1.497</td><td class="v num">1.759 W/m</td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--ink-2); font-size:13px; margin-top:8px;">
+          <b style="color:var(--ink)">敏感性规律:</b>K 与<b>平均路径增长</b>强相关(R²=0.95)——
+          换位越彻底、路径越长、损耗越低;与最大编织角(R²=0.012)、最小弯曲半径(R²=0.093)基本无关。
+          股数阶梯:324→400 降 7.6%,400→484 再降 6.2%。
+        </p>
+        <p style="color:var(--muted); font-size:12.5px; margin-top:6px;">
+          股数上限固定为 484;未设成本与最小丝径约束时,不能由这三个离散根数证明全局最优。
+        </p>
+      </div>
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:6px;">建模范围与未验证项</div>
+        <p style="color:var(--ink-2); font-size:13.5px;">
+          本研究为<b style="color:var(--ink)">准三维</b>:真实 COMSOL 截面有限元 + 连续三维换位电路模型,
+          含碰撞检查与几何约束筛选;不是完整三维体网格涡流模型。推荐候选的筛选规则:
+          电阻比在已找到最小值 0.2% 以内时取铜耗较低者(数值最小候选与推荐候选 K 相差 0.00000%)。
+        </p>
+        <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
+          未包含:完整三维磁场与横向电流、斜股截面椭圆化、端部接线、漆膜电容与介质损耗、
+          温度反馈、加工张力与制造容差;特定漆包规格、实体 CAD 布尔验证与制造轨迹尚未验证。
+          用于最终工程结论前需完整三维求解或实测。
+        </p>
+      </div>
+    </div>
+
+    <div class="concl">
+      <b>问题三结论:</b>在等铜截面 6 mm²、200 kHz、20 A 工况下,484 股 × Ø125.6 μm、周期 500 mm 的
+      <b>完整换位编织</b>将 Rac/Rdc 从 4.769 降至 <span class="hi">1.497</span>(−68.6%),
+      每米铜耗降至 <span class="hi">1.759 W/m</span>(−68.2%);全部几何约束(角度 ≤30°、
+      最小弯曲半径 ≥5 d、间隙 ≥10 μm)满足且留有余量。
+    </div>
+  </section>
+
+  <!-- ================= 验证 ================= -->
+  <section id="verify">
+    <div class="sec-head">
+      <span class="idx">05</span><h3>数值验证</h3>
+      <span class="note">守恒 · 收敛 · 极限 · 独立性 —— 贯穿四问的证据链</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:6px;">交叉校验汇总</div>
+        <table class="data">
+          <thead><tr><th>校验项</th><th style="text-align:right">Q1</th><th style="text-align:right">Q2 圆形</th><th style="text-align:right">Q2 绞合</th></tr></thead>
+          <tbody>
+            <tr><td>电流积分实部 / A</td><td class="v num">20.000000000</td><td class="v num">19.9999999999</td><td class="v num">20.0000000001</td></tr>
+            <tr><td>末次网格加密 ΔRac</td><td class="v num">—</td><td class="v num">0.00028%</td><td class="v num">0.00029%</td></tr>
+            <tr><td>外边界无关性(空气域 40 mm)</td><td class="v num">—</td><td class="v num">1.2×10⁻⁷%</td><td class="v num">0.021%</td></tr>
+            <tr><td>低频极限(10 Hz)Rac/Rdc</td><td class="v num">—</td><td class="v num">1.000007</td><td class="v num">1.000007</td></tr>
+            <tr><td>零绞合极限(绞率 → 0)</td><td class="v num">—</td><td class="v num">基准</td><td class="v num">6.7×10⁻⁵%</td></tr>
+            <tr><td>功率平衡相对误差</td><td class="v num">—</td><td class="v num">1.2×10⁻¹¹</td><td class="v num">1.7×10⁻¹¹</td></tr>
+            <tr><td>网格自由度</td><td class="v num">2 313</td><td class="v num">153k → 176k</td><td class="v num">同量级</td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
+          独立验证工程(空气域 40 mm 外边界、10 Hz 低频、零绞合极限)与已解 .mph 一并交付,任何数值均可复核。
+        </p>
+      </div>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q1-mesh.png" alt="Q1 网格收敛性" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 16</span>网格收敛性:径向 8 → 128 单元序列下结果收敛(每 δ 约 18.9 单元)。</figcaption>
+      </figure>
+    </div>
+
+    <div class="concl">
+      <b>结论:</b>200 kHz 统一工况下,331 股规则绞合(节距 40 mm)将每米铜损降至
+      <b>5.760 W/m</b>,较等截面实心线降低 <span class="hi">6.87%</span>,较圆形分层束降低
+      <span class="hi">3.35%</span>;全部结果通过电流守恒、功率平衡、网格收敛与低频极限四重校验。
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>工具链:MATLAB(解析基准 + PEEC)· COMSOL Multiphysics 6.2.0.290 / AC/DC Module。LiveLink 不可用,两侧以 CSV 数据接口对照。</p>
+    <p>数据来源:已求解的 .mph 工程(Q1/Q2 各目录,附 SHA256SUMS 可复核)与随文档交付的 MATLAB 脚本;小数位用于复核,不代表材料参数具有同等实验精度。</p>
+  </div>
+</footer>
+
+<div id="tip" role="tooltip"></div>
+
+<script src="lib/three.min.js?v=2"></script>
+<script src="lib/OrbitControls.js?v=2"></script>
+<script src="data/q3-braid.js?v=2"></script>
+<script src="q3-viewer.js?v=12"></script>
+
+<script>
+/* ============ 主题切换 ============ */
+var btn = document.getElementById('themeBtn');
+var btnText = document.getElementById('themeBtnText');
+function syncBtn() {
+  btnText.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '深色' : '浅色';
+}
+btn.addEventListener('click', function () {
+  var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('braidloss-theme', next);
+  syncBtn();
+  window.dispatchEvent(new Event('themechange'));
+});
+syncBtn();
+
+/* ============ 条形图悬浮提示(指针 + 键盘可达) ============ */
+var tip = document.getElementById('tip');
+document.querySelectorAll('.bar-row').forEach(function (row) {
+  function show(ev) {
+    var d = row.dataset;
+    var delta = parseFloat(d.delta);
+    tip.innerHTML =
+      '<div class="t-name">' + d.name + '</div>' +
+      '<div class="t-row"><span>Rac</span><b class="num">' + d.rac + ' mΩ/m</b></div>' +
+      '<div class="t-row"><span>Rac / Rdc</span><b class="num">' + d.ratio + '</b></div>' +
+      '<div class="t-row"><span>每米铜损</span><b class="num">' + d.loss + ' W/m</b></div>' +
+      '<div class="t-delta num">' + (delta === 0 ? '基准(等截面实心)' :
+        (delta < 0 ? '▼ ' : '▲ ') + 'vs 实心 ' + (delta > 0 ? '+' : '') + delta + '%') + '</div>';
+    tip.style.display = 'block';
+    move(ev);
+  }
+  function move(ev) {
+    var x = (ev && ev.clientX ? ev.clientX : rect.left) + 14;
+    var y = (ev && ev.clientY ? ev.clientY : rect.top) + 14;
+    var r = tip.getBoundingClientRect();
+    if (x + r.width > innerWidth - 8)  x = innerWidth - r.width - 8;
+    if (y + r.height > innerHeight - 8) y = innerHeight - r.height - 8;
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+  var rect;
+  row.addEventListener('mouseenter', show);
+  row.addEventListener('focus', function () {
+    rect = row.getBoundingClientRect();
+    show(null);
+  });
+  row.addEventListener('mousemove', move);
+  row.addEventListener('mouseleave', function () { tip.style.display = 'none'; });
+  row.addEventListener('blur', function () { tip.style.display = 'none'; });
+});
+</script>
+</body>
+</html>

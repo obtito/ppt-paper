@@ -391,10 +391,10 @@ footer.site p + p { margin-top: 4px; }
         <div class="sub">节距 40 mm · Rac = 14.401 mΩ/m</div>
       </div>
       <div class="tile">
-        <div class="label">Q3 完整换位编织 Rac / Rdc</div>
-        <div class="value num">1.497</div>
-        <div class="delta">▼ vs 初始扭转方案 −68.6%</div>
-        <div class="sub">484 股 · 周期 500 mm · 1.759 W/m</div>
+        <div class="label">Q3 多级绞合推荐方案 Rac / Rdc</div>
+        <div class="value num">4.548</div>
+        <div class="delta">▼ vs 单级基准 −8.45%</div>
+        <div class="sub">64 股 · 4×16 两级(−16/+128 mm)· 5.262 W/m</div>
       </div>
     </div>
 
@@ -405,7 +405,7 @@ footer.site p + p { margin-top: 4px; }
         <tbody>
           <tr><td>问题一 · 15 分</td><td>走通趋肤效应仿真流程,理论交叉验证</td><td>FEM 与 Bessel 解析偏差 0.005% · 网格收敛与频扫验证(FIG 01–02)</td></tr>
           <tr><td>问题二 · 20 分</td><td>设计第一根 Litz 线并对比实心线</td><td>331 股三步定量设计链 · 三束形等截面对比 · 不均流机理与 PEEC 交叉验证</td></tr>
-          <tr><td>问题三 · 30 分</td><td>编织方案系统调优,≥3 种方案对比</td><td>169 候选搜索 · 三拓扑同约束对比 · 敏感性分析(R²=0.95)</td></tr>
+          <tr><td>问题三 · 30 分</td><td>编织方案系统调优,≥3 种方案对比</td><td>129 预定候选(单级/两级/三级)· 真三维 COMSOL 复算 · ROM 盲预测验证 · 130 项审计</td></tr>
           <tr><td>问题四 · 35 分</td><td>完美编织探索与成果展示网站</td><td>本站即交付物:交互式 3D 编织模型 · 逐站截面动画 · 双主题可打印</td></tr>
         </tbody>
       </table>
@@ -655,31 +655,32 @@ footer.site p + p { margin-top: 4px; }
   <section id="q3">
     <div class="sec-head">
       <span class="idx">04</span><h3>问题三 · 编织方案仿真调优</h3>
-      <span class="note">三拓扑同约束对比 · 169 候选搜索 · 敏感性分析 · 准三维(截面 FEM + 三维换位电路)</span>
+      <span class="note">传统多级递归绞合 · 129 预定候选 · 真三维 COMSOL 周期场复算</span>
     </div>
 
     <div class="tiles">
       <div class="tile">
-        <div class="label">初始整体扭转 N=400</div>
-        <div class="value num">4.769<small>R/R₀</small></div>
-        <div class="sub">周期 100 mm · 5.523 W/m</div>
+        <div class="label">冻结基准 · 单级 64 股(节距 96 mm)</div>
+        <div class="value num">4.968<small>R/R₀</small></div>
+        <div class="sub">Rac 14.315 mΩ/m · 5.726 W/m</div>
       </div>
       <div class="tile">
-        <div class="label">推荐完整换位 N=484</div>
-        <div class="value num">1.497<small>R/R₀</small></div>
-        <div class="delta">▼ 电阻比降低 68.61%</div>
-        <div class="sub">周期 500 mm · Rac 4.398 mΩ/m</div>
+        <div class="label">推荐 · 4×16 两级绞合(−16 / +128 mm)</div>
+        <div class="value num">4.548<small>R/R₀</small></div>
+        <div class="delta">▼ 电阻比降低 8.45%</div>
+        <div class="sub">Rac 13.156 mΩ/m · COMSOL 真三维复算</div>
       </div>
       <div class="tile">
-        <div class="label">每米铜耗</div>
-        <div class="value num">1.759<small>W/m</small></div>
-        <div class="delta">▼ 降低 68.15%(vs 5.523)</div>
-        <div class="sub">铜截面 6 mm² · Jdc = 3.333 A/mm²</div>
+        <div class="label">每米铜损(20 A)</div>
+        <div class="value num">5.262<small>W/m</small></div>
+        <div class="delta">▼ 降低 8.10%(vs 5.726)</div>
+        <div class="sub">64 股 · d = 0.3455 mm · 铜截面 6 mm²</div>
       </div>
       <div class="tile">
-        <div class="label">几何可行性余量</div>
-        <div class="value num">14.15<small>°</small></div>
-        <div class="sub">最大编织角;最小间隙 23.5 μm,弯曲半径 15.97 d,路径增长 2.23%</div>
+        <div class="label">复数均流偏差 max|Iⱼ−Ī|/Ī</div>
+        <div class="value num">163.6<small>%</small></div>
+        <div class="delta">▼ 基准为 403.5%</div>
+        <div class="sub">最大绞角 10.44° · 丝长增长 0.66%</div>
       </div>
     </div>
 
@@ -689,35 +690,87 @@ footer.site p + p { margin-top: 4px; }
         <table class="data">
           <thead><tr><th>指标</th><th>定义</th><th style="text-align:right">本题结果</th></tr></thead>
           <tbody>
-            <tr><td>交直流电阻比 R<sub>ac</sub>/R<sub>dc</sub></td><td>核心目标,越接近 1 越好</td><td class="v num">4.769 → 1.497</td></tr>
-            <tr><td>均流偏差 η<sub>I</sub> = max|I<sub>i</sub>−Ī|/Ī</td><td>换位公平性</td><td class="v num">909% → ≈0</td></tr>
-            <tr><td>每米损耗 P = I²R<sub>ac</sub></td><td>工程发热量</td><td class="v num">5.52 → 1.76 W/m</td></tr>
-            <tr><td>换位充分性</td><td>各股径向壳层停留分布 vs 面积加权均匀分布</td><td class="v num">问题四判据方向</td></tr>
+            <tr><td>交直流电阻比 R<sub>ac</sub>/R<sub>dc</sub></td><td>核心目标,越接近 1 越好</td><td class="v num">4.968 → 4.548</td></tr>
+            <tr><td>均流偏差(复数)</td><td>max|I<sub>j</sub>−Ī|/Ī,含幅值与相位</td><td class="v num">403.5% → 163.6%</td></tr>
+            <tr><td>每米损耗 P = I²R<sub>ac</sub></td><td>工程发热量</td><td class="v num">5.726 → 5.262 W/m</td></tr>
+            <tr><td>换位充分性</td><td>各股径向履历一致性</td><td class="v num">问题四判据方向</td></tr>
           </tbody>
         </table>
       </div>
       <div class="panel">
-        <div class="eyebrow" style="margin-bottom:6px;">三种换位拓扑 · 同约束对比(10 分核心项)</div>
-        <p style="color:var(--muted); font-size:12.5px; margin-bottom:6px;">
-          变量全部受控:N=400、周期 0.25 m、等铜截面 6 mm²、200 kHz / 20 A。
-        </p>
+        <div class="eyebrow" style="margin-bottom:6px;">预定搜索空间(129 候选,开始前锁定)</div>
         <table class="data">
-          <thead><tr><th>拓扑</th><th>换位方式</th><th style="text-align:right">R<sub>ac</sub>/R<sub>dc</sub></th><th style="text-align:right">P (W/m)</th><th style="text-align:right">η<sub>I</sub></th></tr></thead>
+          <thead><tr><th>结构</th><th style="text-align:right">候选数</th><th>变量</th></tr></thead>
           <tbody>
-            <tr><td>整体扭转</td><td>仅周向旋转,径向位置固定</td><td class="v num">4.760</td><td class="v num">5.478</td><td class="v num">909%</td></tr>
-            <tr><td>壳层交换</td><td>仅在环带内换位</td><td class="v num">4.663</td><td class="v num">5.368</td><td class="v num">358%</td></tr>
-            <tr><td>完整换位</td><td>遍历全部槽位</td><td class="v num">1.596</td><td class="v num">1.967</td><td class="v num">≈0</td></tr>
+            <tr><td>单级 64 股紧凑六角</td><td class="v num">3</td><td>外级节距 64 / 96 / 128 mm</td></tr>
+            <tr><td>两级 4×16</td><td class="v num">18</td><td>内级 ±16/32/64 × 外级 64/96/128</td></tr>
+            <tr><td>三级 4×4×4</td><td class="v num">108</td><td>内、中级节距与四种 ± 绞向组合</td></tr>
           </tbody>
         </table>
         <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
-          整体扭转 → 壳层交换仅降 <b style="color:var(--ink)">2.0%</b>,壳层交换 → 完整换位再降
-          <b style="color:var(--ink)">65.7%</b>——换位<b style="color:var(--ink)">彻底程度</b>而非幅度主导性能。
+          100 个可行、29 个因几何约束拒绝(记录保留)。筛选边界(自设研究假设):外径 ≤6 mm、
+          丝长增长 ≤10%、绞角 ≤30°、弯曲半径 ≥10 d、间隙 ≥10 μm。
         </p>
       </div>
     </div>
 
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-recursive.png" alt="三种递归绞合结构几何对比" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 10</span>三种递归结构:单级 64 / 两级 4×16 / 三级 4×4×4——子束逐级绞合,分组参数从内到外。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-field-compare.png" alt="COMSOL 真三维场对比" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 11</span>COMSOL 真三维场对比:冻结基准(Rac/Rdc 4.968)vs 推荐方案(4.548)的电流密度幅值分布。</figcaption>
+      </figure>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:6px;">真三维 COMSOL 周期场模型</div>
+        <p style="color:var(--ink-2); font-size:13.5px;">
+          每根铜丝建立<b style="color:var(--ink)">独立三维实体</b>,导线外为不导电域;低频磁准静态近似下
+          全耦合求解磁矢势 A 与周期电势 φ:<b style="color:var(--ink)">J = σ[−∇φ − jωA + (V₀/L)e<sub>z</sub>],∇·J = 0</b>,
+          采用静态 Coulomb 规范。每条周期股线映射闭环仅设电势参考点——<b style="color:var(--ink)">不给任何一股预设 I/N,
+          电流分配完全是求解结果</b>。外部圆柱半径 6 mm 磁绝缘,另以 10 mm 空气域验证边界影响。
+        </p>
+        <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
+          Python 降阶模型(ROM)仅用于筛选:开发集 1 例 + 独立验证集 3 例盲预测(结果产生前封存),
+          门槛 5%;一个新三级样本偏差 −5.35% 超标后,未验证候选不再自动预测,限制已记录在案。
+        </p>
+      </div>
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:6px;">基准 vs 推荐 · 全指标对照</div>
+        <table class="data">
+          <thead><tr><th>项目</th><th style="text-align:right">基准 单级64</th><th style="text-align:right">推荐 4×16</th></tr></thead>
+          <tbody>
+            <tr><td>内→外节距 / mm</td><td class="v num">96</td><td class="v num">−16 / +128</td></tr>
+            <tr><td>R<sub>dc</sub>(10 Hz 极限)/ mΩ·m⁻¹</td><td class="v num">2.8817</td><td class="v num">2.8927</td></tr>
+            <tr><td>R<sub>ac</sub>(200 kHz)/ mΩ·m⁻¹</td><td class="v num">14.3149</td><td class="v num">13.1555</td></tr>
+            <tr><td>R<sub>ac</sub>/R<sub>dc</sub></td><td class="v num">4.9676</td><td class="v num good">4.5478</td></tr>
+            <tr><td>20 A 铜损 / W·m⁻¹</td><td class="v num">5.7260</td><td class="v num good">5.2622</td></tr>
+            <tr><td>外径保守上界 / mm</td><td class="v num">3.594</td><td class="v num">4.531</td></tr>
+            <tr><td>平均丝长增长</td><td class="v num">0.280%</td><td class="v num">0.665%</td></tr>
+            <tr><td>最大局部绞角</td><td class="v num">6.07°</td><td class="v num">10.44°</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-structure.png" alt="推荐结构示意" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 12</span>推荐结构:4×16 两级绞合,内级反向节距 −16 mm、外级 +128 mm,64 股 d=0.3455 mm。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q3-controls.png" alt="参数对照实验" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 13</span>控制变量实验:结构组 / 节距组 / 绞向组分别只改一个因素,固定铜面积、股数、频率与激励。</figcaption>
+      </figure>
+    </div>
+
     <div class="panel" id="q3viewer-panel">
-      <div class="eyebrow" style="margin-bottom:8px;">交互式三维模型 · 484 股完整换位(推荐方案,可视化网格非 FEM)</div>
+      <div class="eyebrow" style="margin-bottom:8px;">交互式三维演示 · 完整换位探索结构(早期研究,非问题三推荐)</div>
+<div class="panel" id="q3viewer-panel">
       <div class="v-wrap">
         <div class="v-stage">
           <canvas id="q3gl"></canvas>
@@ -774,85 +827,45 @@ footer.site p + p { margin-top: 4px; }
         </label>
       </div>
       <p style="color:var(--muted); font-size:12.5px; margin:8px 0 0;">
-        拖拽旋转 · 滚轮缩放 · 右键平移。「拓扑」可在三种换位方案间切换:<b style="color:var(--ink)">完整换位</b>为
-        COMSOL 实测 484 股轨迹;<b style="color:var(--ink)">整体扭转 / 壳层交换</b>为同一槽位布局上的参数化演示——
-        前者每股径向位置固定、只随整体旋转,后者每股仅在所属壳层内轮换。「逐站扫描」沿 500 mm 周期推进,右侧同步显示各站位截面。
+        本查看器为<b style="color:var(--ink)">早期「完整换位」探索研究</b>的三维轨迹演示(484 股方格换位,准三维方法),
+        用于直观理解换位概念,不作为问题三推荐依据——最终推荐以上述 64 股多级绞合真三维研究为准。
+        拖拽旋转 · 滚轮缩放 · 右键平移;「拓扑」可切换整体扭转 / 壳层交换 / 完整换位三种概念对照;
+        「逐站扫描」沿 500 mm 周期推进,右侧同步显示各站位截面。
       </p>
     </div>
 
     <div class="grid-2">
-      <figure class="fig panel">
-        <span class="plate"><img src="img/q3-principle.png" alt="完整换位原理示意" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 10</span>完整换位原理:每股沿轴向依次经过全部槽位,获得相同的磁场履历。</figcaption>
-      </figure>
-      <figure class="fig panel">
-        <span class="plate"><img src="img/q3-topology.png" alt="三种换位拓扑对比" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 11</span>三种换位拓扑对比:整体扭转(径向位置不变)→ 壳层交换(环带内换位)→ 完整换位(遍历全部槽位),均流偏差 η<sub>I</sub> 由 909% 降至 ≈0。</figcaption>
-      </figure>
-    </div>
-
-    <div class="grid-2">
-      <figure class="fig panel">
-        <span class="plate"><img src="img/q3-search.png" alt="169 候选参数搜索记录" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 12</span>169 次候选搜索(含不可行拒绝记录):周期并非越短越好——短周期增大角度与弯曲而被拒。</figcaption>
-      </figure>
-      <figure class="fig panel">
-        <span class="plate"><img src="img/q3-controlled.png" alt="受控对比与敏感性分析" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 13</span>受控对比与敏感性分析:R<sub>ac</sub>/R<sub>dc</sub> 与平均路径增长强相关(R²=0.95),与编织角(R²=0.012)、弯曲半径(R²=0.093)基本无关;离散化复核偏差 0.07%。</figcaption>
-      </figure>
-    </div>
-
-    <div class="grid-2">
-      <figure class="fig panel">
-        <span class="plate"><img src="img/q3-before-after.png" alt="COMSOL 优化前后截面对比" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 14</span>COMSOL 截面对比:初始整体扭转 vs 推荐完整换位的电流分布与损耗密度。</figcaption>
-      </figure>
-      <figure class="fig panel">
-        <span class="plate"><img src="img/q3-current-loss.png" alt="股电流与损耗对比" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 15</span>优化前后股电流均衡度与各股损耗分布:完整换位后电流近乎均分。</figcaption>
-      </figure>
-    </div>
-
-    <div class="grid-2">
       <div class="panel">
-        <div class="eyebrow" style="margin-bottom:6px;">股数对照与参数敏感性</div>
-        <table class="data">
-          <thead><tr><th>N</th><th style="text-align:right">拓扑</th><th style="text-align:right">Rac/Rdc</th><th style="text-align:right">每米铜损</th></tr></thead>
-          <tbody>
-            <tr><td>324</td><td class="v">完整换位 · 周期 0.5 m</td><td class="v num">1.728</td><td class="v num">2.017 W/m</td></tr>
-            <tr><td>400</td><td class="v">完整换位 · 周期 0.5 m</td><td class="v num">1.597</td><td class="v num">1.869 W/m</td></tr>
-            <tr><td>484</td><td class="v">完整换位 · 周期 0.5 m</td><td class="v num">1.497</td><td class="v num">1.759 W/m</td></tr>
-          </tbody>
-        </table>
-        <p style="color:var(--ink-2); font-size:13px; margin-top:8px;">
-          <b style="color:var(--ink)">敏感性规律:</b>K 与<b>平均路径增长</b>强相关(R²=0.95)——
-          换位越彻底、路径越长、损耗越低;与最大编织角(R²=0.012)、最小弯曲半径(R²=0.093)基本无关。
-          股数阶梯:324→400 降 7.6%,400→484 再降 6.2%。
-        </p>
-        <p style="color:var(--muted); font-size:12.5px; margin-top:6px;">
-          股数上限固定为 484;未设成本与最小丝径约束时,不能由这三个离散根数证明全局最优。
+        <div class="eyebrow" style="margin-bottom:6px;">研究边界与诚实声明</div>
+        <p style="color:var(--ink-2); font-size:13px; line-height:1.7;">
+          · 推荐仅覆盖 129 个<b style="color:var(--ink)">预定离散候选</b>:相邻方案差距小、推荐节距位于搜索边界,不宣称唯一或全局最优;<br>
+          · 网格检查:a/3 → a/3.25 相邻变化 −0.145% 通过预定判据,相对 a/2 累计 −1.149%,<b style="color:var(--ink)">不构成</b>真实离散误差 &lt;1% 的证明;<br>
+          · ROM 新三级样本偏差 −5.35% 超出 5% 门槛,未经新验证的候选不再自动预测;<br>
+          · 未纳入:变股数/丝径、扫频、温升反馈、介质损耗、端部接头、成本与疲劳。
         </p>
       </div>
       <div class="panel">
-        <div class="eyebrow" style="margin-bottom:6px;">建模范围与未验证项</div>
-        <p style="color:var(--ink-2); font-size:13.5px;">
-          本研究为<b style="color:var(--ink)">准三维</b>:真实 COMSOL 截面有限元 + 连续三维换位电路模型,
-          含碰撞检查与几何约束筛选;不是完整三维体网格涡流模型。推荐候选的筛选规则:
-          电阻比在已找到最小值 0.2% 以内时取铜耗较低者(数值最小候选与推荐候选 K 相差 0.00000%)。
-        </p>
+        <div class="eyebrow" style="margin-bottom:6px;">证据链与可复现</div>
+        <table class="data">
+          <tbody>
+            <tr><td>交付完整性审计</td><td class="v num">130 项全部通过</td></tr>
+            <tr><td>电流相量求和(应 = 20 A)</td><td class="v num">20.0000000000 A</td></tr>
+            <tr><td>功率平衡 P = I²R<sub>ac</sub></td><td class="v num">误差 0.006%</td></tr>
+            <tr><td>求解资源(推荐方案)</td><td class="v num">632 s · 4 线程</td></tr>
+            <tr><td>复现脚本</td><td class="v">finalize_study · audit_delivery 等 4 项</td></tr>
+          </tbody>
+        </table>
         <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
-          未包含:完整三维磁场与横向电流、斜股截面椭圆化、端部接线、漆膜电容与介质损耗、
-          温度反馈、加工张力与制造容差;特定漆包规格、实体 CAD 布尔验证与制造轨迹尚未验证。
-          用于最终工程结论前需完整三维求解或实测。
+          审计覆盖 Java 源、输入参数、求解日志与 .mph 的 SHA256 全链比对;原始证据目录随交付包提供。
         </p>
       </div>
     </div>
 
     <div class="concl">
-      <b>问题三结论:</b>在等铜截面 6 mm²、200 kHz、20 A 工况下,484 股 × Ø125.6 μm、周期 500 mm 的
-      <b>完整换位编织</b>将 Rac/Rdc 从 4.769 降至 <span class="hi">1.497</span>(−68.6%),
-      每米铜耗降至 <span class="hi">1.759 W/m</span>(−68.2%);全部几何约束(角度 ≤30°、
-      最小弯曲半径 ≥5 d、间隙 ≥10 μm)满足且留有余量。
+      <b>问题三结论:</b>在 64 股、6 mm²、200 kHz、20 A 等约束下,<b>4×16 两级绞合(内级 −16 mm、外级 +128 mm)</b>
+      将 Rac/Rdc 从 4.968 降至 <span class="hi">4.548</span>(−8.45%)、每米铜损耗至 <span class="hi">5.262 W/m</span>(−8.10%),
+      复数均流偏差从 403.5% 收窄至 163.6%;结论来自真三维 COMSOL 周期场复算,
+      经 129 候选预定搜索、ROM 盲预测验证与 130 项交付审计支撑。
     </div>
   </section>
 
@@ -884,7 +897,7 @@ footer.site p + p { margin-top: 4px; }
       </div>
       <figure class="fig panel">
         <span class="plate"><img src="img/q1-mesh.png" alt="Q1 网格收敛性" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 16</span>网格收敛性:径向 8 → 128 单元序列下结果收敛(每 δ 约 18.9 单元)。</figcaption>
+        <figcaption><span class="fno mono">FIG 14</span>网格收敛性:径向 8 → 128 单元序列下结果收敛(每 δ 约 18.9 单元)。</figcaption>
       </figure>
     </div>
 

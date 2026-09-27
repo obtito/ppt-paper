@@ -355,6 +355,11 @@ footer.site p + p { margin-top: 4px; }
       全部数值来自实际求解:有限元数据取自已求解的 <span class="mono">.mph</span> 工程,解析 / PEEC
       数据来自随文档交付、可直接重跑的 MATLAB 脚本;两侧以 CSV 数据接口互校。
     </p>
+    <p class="sub" style="margin-top:14px; border-left:3px solid var(--accent); padding-left:12px;">
+      本文核心结论:<b style="color:var(--ink)">细径化只消除丝内趋肤,却把损耗转移到丝间邻近;
+      结构性换位——让每股轨迹 <i>r</i>(<i>z</i>) 在结构周期内真正遍历所有径向层——才是把
+      R<sub>ac</sub>/R<sub>dc</sub> 从 3.647 一路压向 1 的决定性手段。</b>
+    </p>
     <div class="params" id="paramStrip">
       <span class="chip mono">σ = <b>5.8×10⁷ S/m</b></span>
       <span class="chip mono">f = <b>200 kHz</b></span>
@@ -1066,6 +1071,8 @@ footer.site p + p { margin-top: 4px; }
           <b style="color:var(--ink)">判据</b>:各股槽位占用函数为等停留的全遍历置换 ⇔ 每股经历相同的
           径向位置序列与相同的停留份额 ⇔ 电磁履历一致。三原则:闭合路线覆盖全部位置 ·
           同步连续前移 · 线间保留空间。单纯绕总束轴旋转保持半径不变,不构成完整换位。
+          等价于换位充分性偏差 <i>D</i><sub>shell</sub> = max<sub>i</sub> Σ<sub>m</sub> |p<sub>i,m</sub> − A<sub>m</sub>/A<sub>tot</sub>| → 0
+          (各股壳层停留占比 p<sub>i,m</sub> 趋近面积加权均匀 A<sub>m</sub>/A<sub>tot</sub>)。
         </p>
       </div>
       <div class="panel">
@@ -1255,6 +1262,8 @@ footer.site p + p { margin-top: 4px; }
     <p>公开访问:<b>obtito.github.io/ppt-paper</b>(源码:github.com/obtito/ppt-paper)——赛题问题四「成果展示网站」交付物。</p>
     <p>工具链:MATLAB(解析基准 + PEEC)· COMSOL Multiphysics 6.2.0.290 / AC/DC Module。LiveLink 不可用,两侧以 CSV 数据接口对照。</p>
     <p>数据来源:已求解的 .mph 工程(Q1/Q2 各目录,附 SHA256SUMS 可复核)与随文档交付的 MATLAB 脚本;小数位用于复核,不代表材料参数具有同等实验精度。</p>
+    <p style="margin-top:14px;">主要参考文献:Cruciani &amp; Campi, <i>IEEE Trans. Power Electron.</i> 2023(高频 Litz 线建模,DOI 10.1109/TPEL.2023.3240338)· Guillod et al., <i>COMPEL</i> 2017 · Sullivan, <i>IEEE Trans. Power Electron.</i> 2001, 16(1):142–150 · Piwonski et al., arXiv:2307.00814 · COMSOL Multiphysics 6.2 文档(AC/DC Module)。</p>
+    <p>AI 工具使用声明:Codex 辅助 COMSOL 建模、AI 大模型辅助论文写作;NumPy/SciPy 用于独立验证、Matplotlib 用于图表、COMSOL 用于仿真。全部电磁数值均出自本机 COMSOL 6.2.0.290 的实际有限元求解,<b style="color:var(--ink)">AI 工具未参与生成或修改任何仿真数值</b>。</p>
   </div>
 </footer>
 

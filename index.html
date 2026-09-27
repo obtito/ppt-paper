@@ -1166,6 +1166,62 @@ footer.site p + p { margin-top: 4px; }
       </p>
     </div>
 
+    <div class="panel" id="q4-annulus-panel">
+      <div class="eyebrow" style="margin-bottom:8px;">64 股环形完整换位 · 真三维 COMSOL 验证 · 交互式三维展示</div>
+      <div class="v-wrap">
+        <div class="v-stage">
+          <canvas id="q4gl"></canvas>
+          <span id="q4mode" class="v-mode mono" title="">WebGL</span>
+          <div id="q4load" class="v-load"><span class="mono">构建 64 股几何</span><b id="q4pct" class="mono">0%</b></div>
+        </div>
+        <aside class="v-side">
+          <canvas id="q4sec" width="280" height="280"></canvas>
+          <div class="v-sec-label mono">截面 z = <b id="q4z">8.0</b> mm</div>
+        </aside>
+      </div>
+      <div class="v-ctl">
+        <button type="button" class="vbtn on" id="q4-rotate">⟳ 自转</button>
+        <button type="button" class="vbtn" id="q4-play">▶ 逐站扫描</button>
+        <button type="button" class="vbtn" id="q4-close">特写</button>
+        <button type="button" class="vbtn" id="q4-full">全长</button>
+        <label class="vsel">着色
+          <select id="q4-color">
+            <option value="slot" selected>槽位渐变</option>
+            <option value="copper">纯铜</option>
+            <option value="focus">透视 · 高亮 8 股</option>
+          </select>
+        </label>
+        <label class="vsel">自转速度
+          <select id="q4-rotspeed">
+            <option value="0">停</option>
+            <option value="0.25">0.25×</option>
+            <option value="0.5">0.5×</option>
+            <option value="1" selected>1×</option>
+            <option value="2">2×</option>
+            <option value="4">4×</option>
+          </select>
+        </label>
+        <label class="vsel">扫描速度
+          <select id="q4-scanspeed">
+            <option value="0.25">0.25×</option>
+            <option value="0.5">0.5×</option>
+            <option value="1" selected>1×</option>
+            <option value="2">2×</option>
+            <option value="4">4×</option>
+            <option value="8">8×</option>
+          </select>
+        </label>
+        <label class="vsel" style="flex:1; min-width:200px;">轴向位置
+          <input type="range" id="q4-slider" min="0" max="500" step="1" value="8" style="width:100%;">
+        </label>
+      </div>
+      <p style="color:var(--muted); font-size:12.5px; margin:8px 0 0;">
+        64 股沿开口环带闭合路线(内/外半径比 0.73、切口 14°)同步前移,每股在 500 mm 周期内遍历全部 64 站位、
+        历经相同径向履历。Rac/Rdc 2.680、铜损 3.087 W/m(真三维 COMSOL A–φ,降损 24.20%)。
+        拖拽旋转 · 滚轮缩放 · 右键平移;右侧同步显示当前 z 截面。
+      </p>
+    </div>
+
     <div class="grid-2">
       <figure class="fig panel">
         <span class="plate"><img src="img/q4-full-trans-3d.png" alt="64 股环形完整换位三维铜实体" loading="lazy"></span>
@@ -1292,6 +1348,8 @@ footer.site p + p { margin-top: 4px; }
 <script src="lib/OrbitControls.js?v=2"></script>
 <script src="data/q3-braid.js?v=2"></script>
 <script src="q3-viewer.js?v=12"></script>
+<script src="data/q4-annulus.js?v=1"></script>
+<script src="q4-viewer.js?v=1"></script>
 <script src="data/q3ml-braid.js?v=1"></script>
 <script src="data/q3tw-braid.js?v=1"></script>
 <script src="data/q2tw-braid.js?v=1"></script>

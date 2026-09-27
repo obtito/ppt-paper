@@ -512,7 +512,7 @@ footer.site p + p { margin-top: 4px; }
     <div class="concl">
       问题一作为<b>流程基准</b>:2 mm 导线在 20 A 下 J<sub>dc</sub>=6.366 A/mm² 超出统一工况 4 A/mm²
       约束,题目明确指定的直径与电流予以保留;自问题二起按 ≥5 mm² 铜截面设计
-      (等截面实心线直径约 2.523 mm)。
+      (等截面实心线直径约 2.547 mm)。
     </div>
   </section>
 
@@ -580,7 +580,7 @@ footer.site p + p { margin-top: 4px; }
       </div>
       <div class="bar-row" tabindex="0" data-name="实心等截面"
            data-rac="15.463" data-ratio="4.570" data-loss="6.185" data-delta="0">
-        <div class="blabel"><b>实心等截面</b><span class="bsub">Ø2.523 mm · R/R₀ 4.570</span></div>
+        <div class="blabel"><b>实心等截面</b><span class="bsub">Ø2.547 mm · R/R₀ 4.570</span></div>
         <div class="track"><div class="bar" style="--w:83.1%; width:83.1%"></div>
           <div class="bval"><span class="num">15.463</span></div></div>
       </div>
@@ -1027,7 +1027,7 @@ footer.site p + p { margin-top: 4px; }
   <section id="q4">
     <div class="sec-head">
       <span class="idx">04</span><h3>问题四 · 追寻「完美编织」</h3>
-      <span class="note">完美换位判据 · 拓扑数学描述 · 仿真对比 · 可制造性 · 展示网站(本站)</span>
+      <span class="note">完美换位判据拟定方向(论文框架)· 484 股换位与网站为额外探索(准三维)</span>
     </div>
 
     <div class="tiles">
@@ -1073,6 +1073,8 @@ footer.site p + p { margin-top: 4px; }
           同步连续前移 · 线间保留空间。单纯绕总束轴旋转保持半径不变,不构成完整换位。
           等价于换位充分性偏差 <i>D</i><sub>shell</sub> = max<sub>i</sub> Σ<sub>m</sub> |p<sub>i,m</sub> − A<sub>m</sub>/A<sub>tot</sub>| → 0
           (各股壳层停留占比 p<sub>i,m</sub> 趋近面积加权均匀 A<sub>m</sub>/A<sub>tot</sub>)。
+          本判据为论文 §6 的<b style="color:var(--ink)">拟定方向,不含仿真结果</b>;下方 484 股拓扑与同约束对比属
+          论文之外的<b style="color:var(--ink)">额外探索</b>(准三维,未经完整三维体网格验证,未纳入论文正文)。
         </p>
       </div>
       <div class="panel">
@@ -1178,7 +1180,7 @@ footer.site p + p { margin-top: 4px; }
 
     <div class="grid-2">
       <div class="panel">
-        <div class="eyebrow" style="margin-bottom:6px;">仿真证据:与问题三推荐同约束对比(任务 3)</div>
+        <div class="eyebrow" style="margin-bottom:6px;">额外探索(准三维,未纳入论文正文):与问题三推荐同约束对比</div>
         <table class="data">
           <thead><tr><th>项目</th><th style="text-align:right">Q3 推荐 4×16 两级</th><th style="text-align:right">Q4 完整换位</th></tr></thead>
           <tbody>
@@ -1210,7 +1212,8 @@ footer.site p + p { margin-top: 4px; }
     </div>
 
     <div class="concl">
-      <b>问题四结论:</b>以「等停留全遍历置换」为完美换位判据,构造 22×22 闭合蛇形路线的 484 股完整换位拓扑;
+      <b>问题四 · 论文框架:</b>「完美换位」判据以壳层停留占比与换位充分性偏差 D<sub>shell</sub> 为拟定方向(论文 §6,不含仿真结果)。
+      <b>额外探索(准三维,未纳入论文正文):</b>以「等停留全遍历置换」构造 22×22 闭合蛇形路线的 484 股完整换位拓扑,
       同约束下 Rac/Rdc 降至 <span class="hi">1.497</span>、均流偏差近零,给出连续间隙保守界与工艺边界;
       网站作为可交互交付物公开访问。完美编织可构造、可计算、可讨论制造,但距量产工艺仍需联合优化验证。
     </div>
@@ -1262,7 +1265,7 @@ footer.site p + p { margin-top: 4px; }
     <p>公开访问:<b>obtito.github.io/ppt-paper</b>(源码:github.com/obtito/ppt-paper)——赛题问题四「成果展示网站」交付物。</p>
     <p>工具链:MATLAB(解析基准 + PEEC)· COMSOL Multiphysics 6.2.0.290 / AC/DC Module。LiveLink 不可用,两侧以 CSV 数据接口对照。</p>
     <p>数据来源:已求解的 .mph 工程(Q1/Q2 各目录,附 SHA256SUMS 可复核)与随文档交付的 MATLAB 脚本;小数位用于复核,不代表材料参数具有同等实验精度。</p>
-    <p style="margin-top:14px;">主要参考文献:Cruciani &amp; Campi, <i>IEEE Trans. Power Electron.</i> 2023(高频 Litz 线建模,DOI 10.1109/TPEL.2023.3240338)· Guillod et al., <i>COMPEL</i> 2017 · Sullivan, <i>IEEE Trans. Power Electron.</i> 2001, 16(1):142–150 · Piwonski et al., arXiv:2307.00814 · COMSOL Multiphysics 6.2 文档(AC/DC Module)。</p>
+    <p style="margin-top:14px;">主要参考文献:Sullivan, <i>IEEE Trans. Power Electron.</i> 2001, 16(1):142–150 与 1999, 14(2):281–288 · <i>Finite Element Modeling of Power Cables using Coordinate Transformations</i>, arXiv:2307.00814 · Lammeraner &amp; Štafl, <i>Eddy Currents</i>, 1966 · CTMA / K-TLitz 三维拓扑编织研究项目 · COMSOL AC/DC Module User's Guide 6.2 / Gauge Fixing Blog / Three-Component Formulation。</p>
     <p>AI 工具使用声明:Codex 辅助 COMSOL 建模、AI 大模型辅助论文写作;NumPy/SciPy 用于独立验证、Matplotlib 用于图表、COMSOL 用于仿真。全部电磁数值均出自本机 COMSOL 6.2.0.290 的实际有限元求解,<b style="color:var(--ink)">AI 工具未参与生成或修改任何仿真数值</b>。</p>
   </div>
 </footer>

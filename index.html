@@ -285,6 +285,16 @@ footer.site { padding: 30px 0 46px; color: var(--muted); font-size: 12.5px; bord
   .v-side { width: 100%; }
   .v-stage { height: 380px; }
 }
+
+/* ============ 趋肤效应交互演示 ============ */
+.sk-wrap { display: flex; gap: 16px; flex-wrap: wrap; align-items: stretch; }
+.sk-disc { flex: none; width: 300px; }
+.sk-disc canvas, .sk-right canvas { width: 100%; border: 1px solid var(--hairline); border-radius: 8px; background: var(--surface); display: block; }
+.sk-right { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 10px; }
+.sk-row { display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--ink-2); }
+.sk-row b { color: var(--ink); }
+.sk-slider { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-2); }
+.sk-slider input[type="range"] { flex: 1; accent-color: var(--accent); }
 footer.site p + p { margin-top: 4px; }
 
 /* ============ 打印:强制浅色、隐藏交互件 ============ */
@@ -466,6 +476,25 @@ footer.site p + p { margin-top: 4px; }
         <span class="plate"><img src="img/q1-radial.png" alt="Q1 径向电流密度分布与解析解校验" loading="lazy"></span>
         <figcaption><span class="fno mono">FIG 02</span>径向电流密度分布:FEM 与 Bessel 解析解在同一图上重合校验。</figcaption>
       </figure>
+    </div>
+
+    <div class="panel" id="skinviewer-panel">
+      <div class="eyebrow" style="margin-bottom:8px;">交互演示 · 趋肤效应与频率(Bessel 解析,与 COMSOL 校验一致)</div>
+      <div class="sk-wrap">
+        <div class="sk-disc"><canvas id="skin-disc" width="300" height="300"></canvas></div>
+        <div class="sk-right">
+          <canvas id="skin-curve" height="200"></canvas>
+          <div class="sk-slider">频率
+            <input type="range" id="skin-f" min="3" max="6" step="0.01" value="5.301" />
+            <span>1 kHz – 1 MHz</span>
+          </div>
+          <div class="sk-row" id="skin-out"></div>
+        </div>
+      </div>
+      <p style="color:var(--muted); font-size:12.5px; margin:8px 0 0;">
+        截面圆盘:颜色 = |J(r)|/|J(a)|(对数增强);白色虚环标记趋肤深度 δ。右侧为径向分布对数曲线。
+        拖动频率,观察电流层如何随 δ=√(2/ωμσ) 收缩——200 kHz 时 δ=147.8 μm、R<sub>ac</sub>/R<sub>dc</sub>=3.647,与问题一仿真一致。
+      </p>
     </div>
 
     <div class="concl">
@@ -1145,6 +1174,7 @@ footer.site p + p { margin-top: 4px; }
 <script src="data/q3ml-braid.js?v=1"></script>
 <script src="data/q2tw-braid.js?v=1"></script>
 <script src="mlviewer.js?v=4"></script>
+<script src="skinview.js?v=1"></script>
 <script>
 window.addEventListener('DOMContentLoaded', function () {
   if (window.MountMLViewer && window.Q3ML_BRAID) {

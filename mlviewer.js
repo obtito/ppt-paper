@@ -73,11 +73,13 @@
       if (typeof c === 'string') return c;
       return 'rgb(' + Math.round(c[0] * 255) + ',' + Math.round(c[1] * 255) + ',' + Math.round(c[2] * 255) + ')';
     }
-    function hslRGB(h, s, l) {
-      var c = document.createElement('canvas').getContext('2d');
-      c.fillStyle = hsl(h, s, l);
-      var m = /(\d+),\s*(\d+)%?,\s*(\d+)%/.exec(c.fillStyle);
-      return m ? [m[1] / 255, m[2] / 255, m[3] / 255] : [0.6, 0.6, 0.6];
+    function hslRGB(h, s, l) {   // h∈[0,1];CSS Color 4 标准公式
+      var f = function (n) {
+        var k = (n + h * 12) % 12;
+        var a = s * Math.min(l, 1 - l);
+        return l - a * Math.max(-1, Math.min(Math.min(k - 3, 9 - k), 1));
+      };
+      return [f(0), f(8), f(4)];
     }
 
     var targetZ = cfg.z0 || 8, rotSpeed = 1, scanSpeed = 1, playing = false, done = false;
@@ -162,11 +164,12 @@
         renderer.setSize(box.width, box.height, false);
         camera.aspect = box.width / box.height; camera.updateProjectionMatrix();
       }
-      var raf = 0;
+      var raf = 0, renderFails = 0;
       (function tick() {
         if (fatal) return;
         raf = requestAnimationFrame(tick);
-        try { controls.update(); renderer.render(scene, camera); } catch (e) {}
+        try { controls.update(); renderer.render(scene, camera); renderFails = 0; }
+        catch (e) { if (++renderFails > 3) failOver('渲染异常:' + e.message); }
       })();
       resize(); window.addEventListener('resize', resize);
       requestAnimationFrame(buildBatch);

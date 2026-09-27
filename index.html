@@ -770,6 +770,54 @@ footer.site p + p { margin-top: 4px; }
     </div>
 
 
+    <div class="panel" id="q3mlviewer-panel">
+      <div class="eyebrow" style="margin-bottom:8px;">交互式三维模型 · 推荐方案 4×16 两级绞合(按 COMSOL 研究的构造规则精确重建)</div>
+      <div class="v-wrap">
+        <div class="v-stage">
+          <canvas id="q3mlgl"></canvas>
+          <span id="q3mlmode" class="v-mode mono" title="">WebGL</span>
+          <div id="q3mlload" class="v-load"><span class="mono">构建 64 股几何</span><b id="q3mlpct" class="mono">0%</b></div>
+        </div>
+        <aside class="v-side">
+          <canvas id="q3mlsec" width="280" height="280"></canvas>
+          <div class="v-sec-label mono">截面 z = <b id="q3mlz">6.0</b> mm</div>
+        </aside>
+      </div>
+      <div class="v-ctl">
+        <button type="button" class="vbtn on" id="q3ml-rotate">⟳ 自转</button>
+        <button type="button" class="vbtn" id="q3ml-play">▶ 逐站扫描</button>
+        <button type="button" class="vbtn" id="q3ml-close">特写</button>
+        <button type="button" class="vbtn" id="q3ml-full">全长</button>
+        <label class="vsel">着色
+          <select id="q3ml-color">
+            <option value="bundle" selected>16 子束 × 内级明度</option>
+            <option value="current">电流幅值</option>
+            <option value="copper">纯铜</option>
+          </select>
+        </label>
+        <label class="vsel">自转速度
+          <select id="q3ml-rotspeed">
+            <option value="0">停</option><option value="0.5">0.5×</option>
+            <option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option>
+          </select>
+        </label>
+        <label class="vsel">扫描速度
+          <select id="q3ml-scanspeed">
+            <option value="0.5">0.5×</option><option value="1" selected>1×</option>
+            <option value="2">2×</option><option value="4">4×</option>
+          </select>
+        </label>
+        <label class="vsel" style="flex:1; min-width:180px;">轴向位置
+          <input type="range" id="q3ml-slider" min="0" max="128" step="0.5" value="6" style="width:100%;">
+        </label>
+      </div>
+      <p style="color:var(--muted); font-size:12.5px; margin:8px 0 0;">
+        「16 子束」着色直接呈现递归结构:同一色相 = 同一外级 16 股子束,明度区分束内 4 股;
+        「电流幅值」按 COMSOL 实测每股电流着色(亮=大电流);「逐站扫描」观察内级反向绞合与外级绞合的叠加。
+        拖拽旋转 · 滚轮缩放 · 右键平移。
+      </p>
+    </div>
+
     <div class="grid-2">
       <div class="panel">
         <div class="eyebrow" style="margin-bottom:6px;">研究边界与诚实声明</div>
@@ -1052,6 +1100,18 @@ footer.site p + p { margin-top: 4px; }
 <script src="lib/OrbitControls.js?v=2"></script>
 <script src="data/q3-braid.js?v=2"></script>
 <script src="q3-viewer.js?v=12"></script>
+<script src="data/q3ml-braid.js?v=1"></script>
+<script src="mlviewer.js?v=1"></script>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  if (window.MountMLViewer && window.Q3ML_BRAID) {
+    MountMLViewer(window.Q3ML_BRAID, {
+      prefix: 'q3ml', modes: [{ key: 'bundle' }, { key: 'current' }, { key: 'copper' }],
+      z0: 6, closeCam: [3.2, -5.2], fullCam: [55, -95], softDist: 12
+    });
+  }
+});
+</script>
 
 <script>
 /* ============ 主题切换 ============ */

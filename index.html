@@ -406,9 +406,9 @@ footer.site p + p { margin-top: 4px; }
         <div class="sub">节距 40 mm · Rac = 14.401 mΩ/m</div>
       </div>
       <div class="tile">
-        <div class="label">Q3 多级绞合推荐方案 Rac / Rdc</div>
+        <div class="label">Q3 两级方案 Rac / Rdc(四结构统一条件)</div>
         <div class="value num">4.548</div>
-        <div class="delta">▼ vs 单级基准 −8.45%</div>
+        <div class="delta">▼ vs 规则扭转 −7.18% · 四者最低</div>
         <div class="sub">64 股 · 4×16 两级(−16/+128 mm)· 5.262 W/m</div>
       </div>
       <div class="tile">
@@ -426,7 +426,7 @@ footer.site p + p { margin-top: 4px; }
         <tbody>
           <tr><td>问题一 · 15 分</td><td>走通趋肤效应仿真流程,理论交叉验证</td><td>FEM 与 Bessel 解析偏差 0.005% · 网格收敛与频扫验证(FIG 01–02)</td></tr>
           <tr><td>问题二 · 20 分</td><td>设计第一根 Litz 线并对比实心线</td><td>331 股三步定量设计链 · 三束形等截面对比 · 不均流机理与 PEEC 交叉验证</td></tr>
-          <tr><td>问题三 · 30 分</td><td>编织方案系统调优,≥3 种方案对比</td><td>129 预定候选(单级/两级/三级)· 真三维 COMSOL 复算 · ROM 盲预测验证 · 130 项审计</td></tr>
+          <tr><td>问题三 · 30 分</td><td>编织方案系统调优,≥3 种方案对比</td><td>四结构统一条件 COMSOL 对比 · 129 预定候选 · ROM 盲预测 · 同外径反例诚实边界 · 130 项审计</td></tr>
           <tr><td>问题四 · 35 分</td><td>完美编织探索与成果展示网站</td><td>等停留全遍历判据 · 484 股拓扑数学描述 · 同约束对比(−67%)· 间隙保守界与制造讨论 · 本站即交付物</td></tr>
         </tbody>
       </table>
@@ -734,48 +734,65 @@ footer.site p + p { margin-top: 4px; }
   <section id="q3">
     <div class="sec-head">
       <span class="idx">03</span><h3>问题三 · 编织方案仿真调优</h3>
-      <span class="note">传统多级递归绞合 · 129 预定候选 · 真三维 COMSOL 周期场复算</span>
+      <span class="note">四结构统一条件 COMSOL 对比 · 129 预定候选 · 真三维周期场复算</span>
     </div>
 
     <div class="tiles">
       <div class="tile">
-        <div class="label">冻结基准 · 单级 64 股(节距 96 mm)</div>
-        <div class="value num">4.968<small>R/R₀</small></div>
-        <div class="sub">Rac 14.315 mΩ/m · 5.726 W/m</div>
+        <div class="label">圆形粗线(等面积 Ø2.764 mm)</div>
+        <div class="value num">4.936<small>R/R₀</small></div>
+        <div class="sub">Rac 14.184 mΩ/m · 5.674 W/m</div>
       </div>
       <div class="tile">
-        <div class="label">推荐 · 4×16 两级绞合(−16 / +128 mm)</div>
+        <div class="label">简单成束(紧密直线 · Ø3.593 mm)</div>
+        <div class="value num">4.885<small>R/R₀</small></div>
+        <div class="sub">Rac 14.037 mΩ/m · 5.615 W/m</div>
+      </div>
+      <div class="tile">
+        <div class="label">规则扭转(单级 96 mm · Ø3.594 mm)</div>
+        <div class="value num">4.919<small>R/R₀</small></div>
+        <div class="sub">Rac 14.174 mΩ/m · 5.670 W/m</div>
+      </div>
+      <div class="tile">
+        <div class="label">两级 4×16(−16 / +128 mm · Ø4.531 mm)</div>
         <div class="value num">4.548<small>R/R₀</small></div>
-        <div class="delta">▼ 电阻比降低 8.45%</div>
-        <div class="sub">Rac 13.156 mΩ/m · COMSOL 真三维复算</div>
-      </div>
-      <div class="tile">
-        <div class="label">每米铜损(20 A)</div>
-        <div class="value num">5.262<small>W/m</small></div>
-        <div class="delta">▼ 降低 8.10%(vs 5.726)</div>
-        <div class="sub">64 股 · d = 0.3455 mm · 铜截面 6 mm²</div>
-      </div>
-      <div class="tile">
-        <div class="label">复数均流偏差 max|Iⱼ−Ī|/Ī</div>
-        <div class="value num">163.6<small>%</small></div>
-        <div class="delta">▼ 基准为 403.5%</div>
-        <div class="sub">最大绞角 10.44° · 丝长增长 0.66%</div>
+        <div class="delta">▼ 四者中最低,较规则扭转 −7.18%</div>
+        <div class="sub">Rac 13.156 mΩ/m · 5.262 W/m</div>
       </div>
     </div>
 
     <div class="grid-2">
       <div class="panel">
+        <div class="eyebrow" style="margin-bottom:6px;">四结构统一条件 COMSOL 对比(64 股 · 6 mm² · 200 kHz · 20 A · 1 m 归一)</div>
+        <table class="data">
+          <thead><tr><th>结构</th><th style="text-align:right">R<sub>dc</sub> / mΩ·m⁻¹</th><th style="text-align:right">R<sub>ac</sub> / mΩ·m⁻¹</th><th style="text-align:right">R<sub>ac</sub>/R<sub>dc</sub></th><th style="text-align:right">铜损 / W·m⁻¹</th><th style="text-align:right">外径 / mm</th></tr></thead>
+          <tbody>
+            <tr><td>圆形粗线(等面积实心)</td><td class="v num">2.8736</td><td class="v num">14.184</td><td class="v num">4.936</td><td class="v num">5.674</td><td class="v num">2.764</td></tr>
+            <tr><td>简单成束(紧密直线)</td><td class="v num">2.8736</td><td class="v num">14.037</td><td class="v num">4.885</td><td class="v num">5.615</td><td class="v num">3.593</td></tr>
+            <tr><td>规则扭转(单级 96 mm)</td><td class="v num">2.8816</td><td class="v num">14.174</td><td class="v num">4.919</td><td class="v num">5.670</td><td class="v num">3.594</td></tr>
+            <tr><td>两级 4×16(−16 / +128 mm)</td><td class="v num">2.8927</td><td class="v num">13.156</td><td class="v num good">4.548</td><td class="v num good">5.262</td><td class="v num">4.531</td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
+          统一口径:铜面积 6 mm²、总电流 20 A RMS、200 kHz、σ=5.8×10⁷ S/m、按轴向 1 m 归一(P=I²R=400R)。
+          各股电气绝缘、仅约束总电流,不预设每股 20/64 A。规则扭转经螺旋坐标三分量模型复核。
+        </p>
+      </div>
+      <div class="panel">
         <div class="eyebrow" style="margin-bottom:6px;">评价指标体系(按赛题表 2 定义)</div>
         <table class="data">
           <thead><tr><th>指标</th><th>定义</th><th style="text-align:right">本题结果</th></tr></thead>
           <tbody>
-            <tr><td>交直流电阻比 R<sub>ac</sub>/R<sub>dc</sub></td><td>核心目标,越接近 1 越好</td><td class="v num">4.968 → 4.548</td></tr>
+            <tr><td>交直流电阻比 R<sub>ac</sub>/R<sub>dc</sub></td><td>核心目标,越接近 1 越好</td><td class="v num">两级 4.548 最低(其余 4.885–4.936)</td></tr>
             <tr><td>均流偏差(复数)</td><td>max|I<sub>j</sub>−Ī|/Ī,含幅值与相位</td><td class="v num">403.5% → 163.6%</td></tr>
-            <tr><td>每米损耗 P = I²R<sub>ac</sub></td><td>工程发热量</td><td class="v num">5.726 → 5.262 W/m</td></tr>
-            <tr><td>换位充分性</td><td>各股径向履历一致性</td><td class="v num">问题四判据方向</td></tr>
+            <tr><td>每米损耗 P = I²R<sub>ac</sub></td><td>工程发热量</td><td class="v num">两级 5.262 W/m(四者最低)</td></tr>
+            <tr><td>换位充分性</td><td>各股径向履历一致性</td><td class="v num">两级非完全换位,64 股不全部到达中心</td></tr>
           </tbody>
         </table>
       </div>
+    </div>
+
+    <div class="grid-2">
       <div class="panel">
         <div class="eyebrow" style="margin-bottom:6px;">预定搜索空间(129 候选,开始前锁定)</div>
         <table class="data">
@@ -791,16 +808,30 @@ footer.site p + p { margin-top: 4px; }
           丝长增长 ≤10%、绞角 ≤30°、弯曲半径 ≥10 d、间隙 ≥10 μm。
         </p>
       </div>
+      <div class="panel">
+        <div class="eyebrow" style="margin-bottom:6px;">反例:同外径直线成束(诚实边界)</div>
+        <p style="color:var(--ink-2); font-size:13.5px; line-height:1.7;">
+          允许简单成束使用与两级方案<b style="color:var(--ink)">相同的 4.531 mm 外径</b>(均匀扩大中心间距,最小裸铜间隙 151.4 μm)后,
+          其铜损为 <span class="hi">4.831 W/m</span>——<b style="color:var(--ink)">比两级方案还低 8.20%</b>。
+          因此两级方案只能称为<b style="color:var(--ink)">原固定间隙候选集合内的最优</b>,不能称为所有结构与参数上的全局最优;
+          且外径、用铜量并未完全对齐(两级外径较规则扭转 +26.05%、铜体积 +0.66%),「等铜截面」≠「等铜质量」≠「等安装空间」。
+        </p>
+      </div>
     </div>
+
+    <figure class="fig panel" style="margin-bottom:16px;">
+      <span class="plate"><img src="img/q3-unified-loss.png" alt="统一条件铜损对比" loading="lazy"></span>
+      <figcaption><span class="fno mono">FIG 10</span>统一条件铜损对比(64 股 · 6 mm² · 200 kHz · 20 A · 1 m 归一):两级方案 5.262 W/m 居四者最低;虚线为同外径直线成束反例 4.831 W/m。</figcaption>
+    </figure>
 
     <div class="grid-2">
       <figure class="fig panel">
         <span class="plate"><img src="img/q3-recursive.png" alt="三种递归绞合结构几何对比" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 10</span>三种递归结构:单级 64 / 两级 4×16 / 三级 4×4×4——子束逐级绞合,分组参数从内到外。</figcaption>
+        <figcaption><span class="fno mono">FIG 11</span>三种递归结构:单级 64 / 两级 4×16 / 三级 4×4×4——子束逐级绞合,分组参数从内到外。</figcaption>
       </figure>
       <figure class="fig panel">
-        <span class="plate"><img src="img/q3-field-compare.png" alt="COMSOL 真三维场对比" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 11</span>COMSOL 真三维场对比:冻结基准(Rac/Rdc 4.968)vs 推荐方案(4.548)的电流密度幅值分布。</figcaption>
+        <span class="plate"><img src="img/q3-field-evidence.png" alt="COMSOL 三维求解场证据" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 12</span>COMSOL 三维求解场证据(按共同色标绘制真实场插值,非界面截图):左 = 规则扭转交叉检查模型,右 = 两级方案。</figcaption>
       </figure>
     </div>
 
@@ -819,37 +850,41 @@ footer.site p + p { margin-top: 4px; }
         </p>
       </div>
       <div class="panel">
-        <div class="eyebrow" style="margin-bottom:6px;">基准 vs 推荐 · 全指标对照</div>
+        <div class="eyebrow" style="margin-bottom:6px;">规则扭转(螺旋坐标复核) vs 两级方案 · 全指标对照</div>
         <table class="data">
-          <thead><tr><th>项目</th><th style="text-align:right">基准 单级64</th><th style="text-align:right">推荐 4×16</th></tr></thead>
+          <thead><tr><th>项目</th><th style="text-align:right">规则扭转 96 mm</th><th style="text-align:right">两级 4×16</th></tr></thead>
           <tbody>
             <tr><td>内→外节距 / mm</td><td class="v num">96</td><td class="v num">−16 / +128</td></tr>
-            <tr><td>R<sub>dc</sub>(10 Hz 极限)/ mΩ·m⁻¹</td><td class="v num">2.8817</td><td class="v num">2.8927</td></tr>
-            <tr><td>R<sub>ac</sub>(200 kHz)/ mΩ·m⁻¹</td><td class="v num">14.3149</td><td class="v num">13.1555</td></tr>
-            <tr><td>R<sub>ac</sub>/R<sub>dc</sub></td><td class="v num">4.9676</td><td class="v num good">4.5478</td></tr>
-            <tr><td>20 A 铜损 / W·m⁻¹</td><td class="v num">5.7260</td><td class="v num good">5.2622</td></tr>
+            <tr><td>R<sub>dc</sub>(10 Hz 极限)/ mΩ·m⁻¹</td><td class="v num">2.8816</td><td class="v num">2.8927</td></tr>
+            <tr><td>R<sub>ac</sub>(200 kHz)/ mΩ·m⁻¹</td><td class="v num">14.1738</td><td class="v num">13.1555</td></tr>
+            <tr><td>R<sub>ac</sub>/R<sub>dc</sub></td><td class="v num">4.9187</td><td class="v num good">4.5478</td></tr>
+            <tr><td>20 A 铜损 / W·m⁻¹</td><td class="v num">5.6695</td><td class="v num good">5.2622</td></tr>
             <tr><td>外径保守上界 / mm</td><td class="v num">3.594</td><td class="v num">4.531</td></tr>
             <tr><td>平均丝长增长</td><td class="v num">0.280%</td><td class="v num">0.665%</td></tr>
             <tr><td>最大局部绞角</td><td class="v num">6.07°</td><td class="v num">10.44°</td></tr>
           </tbody>
         </table>
+        <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
+          规则扭转本次采用螺旋坐标三分量电磁模型复核(保留真实法向圆丝截面与三方向电流):复核值 5.6695 W/m,
+          较旧一阶三维值 5.7260 W/m 低 0.996%——旧「−8.10%」的降幅口径以复核值为准,即 <b style="color:var(--ink)">−7.18%</b>。
+        </p>
       </div>
     </div>
 
     <div class="grid-2">
       <figure class="fig panel">
         <span class="plate"><img src="img/q3-structure.png" alt="推荐结构示意" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 12</span>推荐结构:4×16 两级绞合,内级反向节距 −16 mm、外级 +128 mm,64 股 d=0.3455 mm。</figcaption>
+        <figcaption><span class="fno mono">FIG 13</span>推荐结构:4×16 两级绞合,内级反向节距 −16 mm、外级 +128 mm,64 股 d=0.3455 mm。</figcaption>
       </figure>
       <figure class="fig panel">
         <span class="plate"><img src="img/q3-controls.png" alt="参数对照实验" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 13</span>控制变量实验:结构组 / 节距组 / 绞向组分别只改一个因素,固定铜面积、股数、频率与激励。</figcaption>
+        <figcaption><span class="fno mono">FIG 14</span>控制变量实验:结构组 / 节距组 / 绞向组分别只改一个因素,固定铜面积、股数、频率与激励。</figcaption>
       </figure>
     </div>
 
 
     <div class="panel" id="q3mlviewer-panel">
-      <div class="eyebrow" style="margin-bottom:8px;">交互式三维模型 · 推荐方案 4×16 两级绞合(按 COMSOL 研究的构造规则精确重建)</div>
+      <div class="eyebrow" style="margin-bottom:8px;">结构对照 A · 交互式三维模型 — 两级 4×16(推荐方案,按 COMSOL 研究构造规则重建)</div>
       <div class="v-wrap">
         <div class="v-stage">
           <canvas id="q3mlgl"></canvas>
@@ -896,38 +931,89 @@ footer.site p + p { margin-top: 4px; }
       </p>
     </div>
 
+    <div class="panel" id="q3twviewer-panel">
+      <div class="eyebrow" style="margin-bottom:8px;">结构对照 B · 交互式三维模型 — 规则扭转(单级 96 mm,统一条件 64 股重建)</div>
+      <div class="v-wrap">
+        <div class="v-stage">
+          <canvas id="q3twgl"></canvas>
+          <span id="q3twmode" class="v-mode mono" title="">WebGL</span>
+          <div id="q3twload" class="v-load"><span class="mono">构建 64 股几何</span><b id="q3twpct" class="mono">0%</b></div>
+        </div>
+        <aside class="v-side">
+          <canvas id="q3twsec" width="280" height="280"></canvas>
+          <div class="v-sec-label mono">截面 z = <b id="q3twz">4.0</b> mm</div>
+        </aside>
+      </div>
+      <div class="v-ctl">
+        <button type="button" class="vbtn on" id="q3tw-rotate">⟳ 自转</button>
+        <button type="button" class="vbtn" id="q3tw-play">▶ 逐站扫描</button>
+        <button type="button" class="vbtn" id="q3tw-close">特写</button>
+        <button type="button" class="vbtn" id="q3tw-full">全长</button>
+        <label class="vsel">着色
+          <select id="q3tw-color">
+            <option value="current" selected>电流幅值</option>
+            <option value="ring">环层</option>
+            <option value="copper">纯铜</option>
+          </select>
+        </label>
+        <label class="vsel">自转速度
+          <select id="q3tw-rotspeed">
+            <option value="0">停</option><option value="0.5">0.5×</option>
+            <option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option>
+          </select>
+        </label>
+        <label class="vsel">扫描速度
+          <select id="q3tw-scanspeed">
+            <option value="0.5">0.5×</option><option value="1" selected>1×</option>
+            <option value="2">2×</option><option value="4">4×</option>
+          </select>
+        </label>
+        <label class="vsel" style="flex:1; min-width:180px;">轴向位置
+          <input type="range" id="q3tw-slider" min="0" max="96" step="0.5" value="4" style="width:100%;">
+        </label>
+      </div>
+      <p style="color:var(--muted); font-size:12.5px; margin:8px 0 0;">
+        「电流幅值」按 COMSOL 实测每股电流着色(亮=大电流);「环层」按六角环层着色——外层股电流显著高于内层,即规则扭转未解决的邻近效应。
+        对照结构 A(两级)可见内级反向绞合如何把子束拆开换位。拖拽旋转 · 滚轮缩放 · 右键平移。
+      </p>
+    </div>
+
     <div class="grid-2">
       <div class="panel">
         <div class="eyebrow" style="margin-bottom:6px;">研究边界与诚实声明</div>
         <p style="color:var(--ink-2); font-size:13px; line-height:1.7;">
-          · 推荐仅覆盖 129 个<b style="color:var(--ink)">预定离散候选</b>:相邻方案差距小、推荐节距位于搜索边界,不宣称唯一或全局最优;<br>
-          · 网格检查:a/3 → a/3.25 相邻变化 −0.145% 通过预定判据,相对 a/2 累计 −1.149%,<b style="color:var(--ink)">不构成</b>真实离散误差 &lt;1% 的证明;<br>
-          · ROM 新三级样本偏差 −5.35% 超出 5% 门槛,未经新验证的候选不再自动预测;<br>
-          · 未纳入:变股数/丝径、扫频、温升反馈、介质损耗、端部接头、成本与疲劳。
+          · 两级方案仅为原<b style="color:var(--ink)">固定 40 μm 间隙候选集合</b>内的最优;同外径直线成束反例(4.831 W/m,低 8.20%)说明它<b style="color:var(--ink)">不是全局最优</b>;<br>
+          · 「等正常铜截面」≠「仅变拓扑」:外径、排布、实际线长仍随结构变化(两级外径 +26.05%、铜体积 +0.66%);<br>
+          · 旧一阶三维网格约 1% 离散偏差,二阶互验后仅 0.0196%;规则扭转旧值比螺旋复核值高 0.996%;<br>
+          · 两级结构 64 股<b style="color:var(--ink)">并非全部到达所有径向位置</b>,不能称为完全全局换位(判据见问题四);<br>
+          · ROM 新三级样本偏差 −5.35% 超 5% 门槛,未经新验证的候选不再自动预测;<br>
+          · 未纳入:变股数/丝径、扫频、温升反馈、介质损耗、端部接头、成本与疲劳;全部为数值模型,无实物测量。
         </p>
       </div>
       <div class="panel">
-        <div class="eyebrow" style="margin-bottom:6px;">证据链与可复现</div>
+        <div class="eyebrow" style="margin-bottom:6px;">数值可靠性交叉验证与可复现</div>
         <table class="data">
           <tbody>
-            <tr><td>交付完整性审计</td><td class="v num">130 项全部通过</td></tr>
-            <tr><td>电流相量求和(应 = 20 A)</td><td class="v num">20.0000000000 A</td></tr>
-            <tr><td>功率平衡 P = I²R<sub>ac</sub></td><td class="v num">误差 0.006%</td></tr>
+            <tr><td>圆形粗线 vs Bessel 解析</td><td class="v num">COMSOL 相对误差 0.000138%</td></tr>
+            <tr><td>逐股电流相量和(应 = 20 A)</td><td class="v num">残差 ~10⁻¹² A</td></tr>
+            <tr><td>功率守恒 P = I²R<sub>ac</sub></td><td class="v num">残差 ~10⁻¹⁴(相对)</td></tr>
+            <tr><td>四结构网格末两档 Rac 变化</td><td class="v num">−0.001% ~ −0.0029%</td></tr>
+            <tr><td>交付完整性审计</td><td class="v num">130 项 + 新模型哈希全部通过</td></tr>
             <tr><td>求解资源(推荐方案)</td><td class="v num">632 s · 4 线程</td></tr>
-            <tr><td>复现脚本</td><td class="v">finalize_study · audit_delivery 等 4 项</td></tr>
           </tbody>
         </table>
         <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
-          审计覆盖 Java 源、输入参数、求解日志与 .mph 的 SHA256 全链比对;原始证据目录随交付包提供。
+          审计覆盖 Java 源、输入参数、求解日志与 .mph 的 SHA256 全链比对;四个新增模型均含完整日志与含解 MPH,原始证据目录随交付包提供。
         </p>
       </div>
     </div>
 
     <div class="concl">
-      <b>问题三结论:</b>在 64 股、6 mm²、200 kHz、20 A 等约束下,<b>4×16 两级绞合(内级 −16 mm、外级 +128 mm)</b>
-      将 Rac/Rdc 从 4.968 降至 <span class="hi">4.548</span>(−8.45%)、每米铜损耗至 <span class="hi">5.262 W/m</span>(−8.10%),
-      复数均流偏差从 403.5% 收窄至 163.6%;结论来自真三维 COMSOL 周期场复算,
-      经 129 候选预定搜索、ROM 盲预测验证与 130 项交付审计支撑。
+      <b>问题三结论:</b>在 64 股、6 mm²、200 kHz、20 A 统一条件下比较四种结构,<b>4×16 两级绞合(内级 −16 mm、外级 +128 mm)</b>
+      以 Rac/Rdc <span class="hi">4.548</span>、铜损 <span class="hi">5.262 W/m</span> 居四者最低(粗线 4.936 / 成束 4.885 / 规则扭转 4.919),
+      较螺旋复核后的规则扭转降损 <span class="hi">−7.18%</span>,复数均流偏差从 403.5% 收窄至 163.6%。
+      但同外径直线成束反例(4.831 W/m)表明它<b style="color:var(--ink)">仅在原固定间隙候选集合内最优,非全局最优</b>;
+      结论来自真三维 COMSOL 周期场复算、Bessel 解析互验与 130 项交付审计。
     </div>
   </section>
 
@@ -1075,11 +1161,11 @@ footer.site p + p { margin-top: 4px; }
     <div class="grid-2">
       <figure class="fig panel">
         <span class="plate"><img src="img/q3-principle.png" alt="完整换位原理示意" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 14</span>完整换位原理:闭合路线覆盖全部位置,每股沿轴向依次经过全部槽位。</figcaption>
+        <figcaption><span class="fno mono">FIG 15</span>完整换位原理:闭合路线覆盖全部位置,每股沿轴向依次经过全部槽位。</figcaption>
       </figure>
       <figure class="fig panel">
         <span class="plate"><img src="img/q3-topology.png" alt="三种换位拓扑对比" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 15</span>三种拓扑对照:整体扭转(永不换层)→ 壳层交换(环带内)→ 完整换位(全遍历,η<sub>I</sub>→10⁻¹³)。</figcaption>
+        <figcaption><span class="fno mono">FIG 16</span>三种拓扑对照:整体扭转(永不换层)→ 壳层交换(环带内)→ 完整换位(全遍历,η<sub>I</sub>→10⁻¹³)。</figcaption>
       </figure>
     </div>
 
@@ -1151,7 +1237,7 @@ footer.site p + p { margin-top: 4px; }
       </div>
       <figure class="fig panel">
         <span class="plate"><img src="img/q1-mesh.png" alt="Q1 网格收敛性" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 16</span>网格收敛性:径向 8 → 128 单元序列下结果收敛(每 δ 约 18.9 单元)。</figcaption>
+        <figcaption><span class="fno mono">FIG 17</span>网格收敛性:径向 8 → 128 单元序列下结果收敛(每 δ 约 18.9 单元)。</figcaption>
       </figure>
     </div>
 
@@ -1179,6 +1265,7 @@ footer.site p + p { margin-top: 4px; }
 <script src="data/q3-braid.js?v=2"></script>
 <script src="q3-viewer.js?v=12"></script>
 <script src="data/q3ml-braid.js?v=1"></script>
+<script src="data/q3tw-braid.js?v=1"></script>
 <script src="data/q2tw-braid.js?v=1"></script>
 <script src="mlviewer.js?v=4"></script>
 <script src="skinview.js?v=2"></script>
@@ -1188,6 +1275,12 @@ window.addEventListener('DOMContentLoaded', function () {
     MountMLViewer(window.Q3ML_BRAID, {
       prefix: 'q3ml', modes: [{ key: 'bundle' }, { key: 'current' }, { key: 'copper' }],
       z0: 6, closeCam: [3.2, -5.2], fullCam: [55, -95], softDist: 12
+    });
+  }
+  if (window.MountMLViewer && window.Q3TW_BRAID) {
+    MountMLViewer(window.Q3TW_BRAID, {
+      prefix: 'q3tw', modes: [{ key: 'current' }, { key: 'ring' }, { key: 'copper' }],
+      z0: 4, closeCam: [2.6, -4.2], fullCam: [30, -50], softDist: 9
     });
   }
   if (window.MountMLViewer && window.Q2TW_BRAID) {

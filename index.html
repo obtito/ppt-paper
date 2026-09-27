@@ -350,7 +350,7 @@ footer.site p + p { margin-top: 4px; }
   <!-- ================= 页眉 ================= -->
   <div class="hero-head">
     <div class="eyebrow">MATLAB 解析 × COMSOL 6.2 AC/DC · 频域有限元</div>
-    <h2>高频交流损耗:从单线趋肤效应到 484 股完整换位编织</h2>
+    <h2>高频交流损耗:从单线趋肤效应到 64 股完整换位编织</h2>
     <p class="sub">
       全部数值来自实际求解:有限元数据取自已求解的 <span class="mono">.mph</span> 工程,解析 / PEEC
       数据来自随文档交付、可直接重跑的 MATLAB 脚本;两侧以 CSV 数据接口互校。
@@ -417,10 +417,10 @@ footer.site p + p { margin-top: 4px; }
         <div class="sub">64 股 · 4×16 两级(−16/+128 mm)· 5.262 W/m</div>
       </div>
       <div class="tile">
-        <div class="label">Q4 完整换位「完美编织」</div>
-        <div class="value num">1.497</div>
-        <div class="delta">▼ 均流偏差 ≈10⁻¹³(全槽位等停留)</div>
-        <div class="sub">484 股 · 周期 500 mm · 间隙界 ≥23.5 μm</div>
+        <div class="label">Q4 完整换位「完美编织」(真三维)</div>
+        <div class="value num">2.680</div>
+        <div class="delta">▼ vs 多级束同外径 −24.20% · 均流 ≈10⁻¹⁰</div>
+        <div class="sub">64 股环形 · 6.2 mm 外径 · 真三维 COMSOL · 3.087 W/m</div>
       </div>
     </div>
 
@@ -432,7 +432,7 @@ footer.site p + p { margin-top: 4px; }
           <tr><td>问题一 · 15 分</td><td>走通趋肤效应仿真流程,理论交叉验证</td><td>FEM 与 Bessel 解析偏差 0.005% · 网格收敛与频扫验证(FIG 01–02)</td></tr>
           <tr><td>问题二 · 20 分</td><td>设计第一根 Litz 线并对比实心线</td><td>331 股三步定量设计链 · 三束形等截面对比 · 不均流机理与 PEEC 交叉验证</td></tr>
           <tr><td>问题三 · 30 分</td><td>编织方案系统调优,≥3 种方案对比</td><td>四结构统一条件 COMSOL 对比 · 129 预定候选 · ROM 盲预测 · 同外径反例诚实边界 · 130 项审计</td></tr>
-          <tr><td>问题四 · 35 分</td><td>完美编织探索与成果展示网站</td><td>等停留全遍历判据 · 484 股拓扑数学描述 · 同约束对比(−67%)· 间隙保守界与制造讨论 · 本站即交付物</td></tr>
+          <tr><td>问题四 · 35 分</td><td>完美编织探索与成果展示网站</td><td>等停留全遍历判据 · 64 股环形拓扑真三维验证 · 同外径对比(−24.20%)· 间隙保守界与制造讨论 · 本站即交付物</td></tr>
         </tbody>
       </table>
     </div>
@@ -1027,31 +1027,32 @@ footer.site p + p { margin-top: 4px; }
   <section id="q4">
     <div class="sec-head">
       <span class="idx">04</span><h3>问题四 · 追寻「完美编织」</h3>
-      <span class="note">完美换位判据拟定方向(论文框架)· 484 股换位与网站为额外探索(准三维)</span>
+      <span class="note">完美换位判据 · 64 股环形完整换位 · 真三维 COMSOL 验证 · 可制造性 · 展示网站(本站)</span>
     </div>
 
     <div class="tiles">
       <div class="tile">
-        <div class="label">完整换位 484 股 Rac / Rdc</div>
-        <div class="value num">1.497<small>R/R₀</small></div>
-        <div class="delta">▼ vs 问题三推荐(4.548)−67%</div>
-        <div class="sub">周期 500 mm · 同 6 mm² / 200 kHz / 20 A</div>
+        <div class="label">完整换位 64 股 Rac / Rdc(真三维)</div>
+        <div class="value num">2.680<small>R/R₀</small></div>
+        <div class="delta">▼ vs 多级束同外径(3.497)−24.20%</div>
+        <div class="sub">同 64 股 / 6 mm² / 6.2 mm 外径 · 200 kHz / 20 A</div>
       </div>
       <div class="tile">
-        <div class="label">均流偏差 η<sub>I</sub>(完整换位对照)</div>
-        <div class="value num">≈10⁻¹³</div>
-        <div class="delta">换位公平性的直接证据</div>
-        <div class="sub">484 方案四相位功率偏差 0.08%</div>
+        <div class="label">均流偏差 η<sub>I</sub>(完整换位 vs 多级束)</div>
+        <div class="value num">≈10⁻¹⁰</div>
+        <div class="delta">156.43% → ≈0,完全均流</div>
+        <div class="sub">复数均流偏差,每股 20/64 A</div>
       </div>
       <div class="tile">
-        <div class="label">槽位遍历</div>
-        <div class="value num">484<small>/484</small></div>
-        <div class="sub">每股在全部槽位停留严格相等:P/484 = 1.033 mm/站</div>
+        <div class="label">每米铜损</div>
+        <div class="value num">3.087<small>W/m</small></div>
+        <div class="delta">▼ 多级束同外径 4.072 → 3.087</div>
+        <div class="sub">Rac 7.717 mΩ/m · Rdc 2.879 mΩ/m</div>
       </div>
       <div class="tile">
         <div class="label">裸铜间隙保守下界</div>
-        <div class="value num">23.5<small>μm</small></div>
-        <div class="sub">连续区间证明(Bernstein 凸包);t=8 μm 漆膜时余 7.5 μm</div>
+        <div class="value num">93.4<small>μm</small></div>
+        <div class="sub">预留 ≥40 μm 要求 · 最大倾角 3.81° · 弯曲半径 228×丝径</div>
       </div>
     </div>
 
@@ -1059,22 +1060,20 @@ footer.site p + p { margin-top: 4px; }
       <div class="panel">
         <div class="eyebrow" style="margin-bottom:6px;">判据与拓扑的数学描述(任务 1–2)</div>
         <div class="formula">
-          r<sub>j</sub>(z) = ( C<sub>x</sub>(j + 484z/P),&nbsp; C<sub>y</sub>(j + 484z/P),&nbsp; z ),&nbsp; P = 500 mm
+          r<sub>j</sub>(z) = ( C((j + 64z/P) mod 64),&nbsp; z ),&nbsp; P = 500 mm
         </div>
         <p style="color:var(--ink-2); font-size:13.5px; margin-top:6px;">
-          截面内 22×22 个位置由<b style="color:var(--ink)">经过每个位置一次的闭合蛇形路线</b> C(u) 连接
-          (C(u+484)=C(u)),周期三次样条平滑;484 根单丝按路线顺序分布,沿轴向同步连续前移。
-          第 j 股在 z = kP/484 处占据槽位 <b style="color:var(--ink)">(j+k) mod 484</b>——
-          单一 484-循环置换,k = 0…483 覆盖全部槽位且<b style="color:var(--ink)">停留时间严格相等</b>。
+          64 个站位沿<b style="color:var(--ink)">开口环带上的单一闭合路线</b> C(u) 按弧长分布
+          (内/外圆弧半径比 0.73、两端切口半角 14°,C(u+64)=C(u)),周期三次样条平滑。
+          第 j 股在 z = kP/64 处占据站位 <b style="color:var(--ink)">(j+k) mod 64</b>——
+          单一 64-循环置换,k = 0…63 覆盖全部站位且<b style="color:var(--ink)">停留时间严格相等</b>。
         </p>
         <p style="color:var(--ink-2); font-size:13px;">
           <b style="color:var(--ink)">判据</b>:各股槽位占用函数为等停留的全遍历置换 ⇔ 每股经历相同的
           径向位置序列与相同的停留份额 ⇔ 电磁履历一致。三原则:闭合路线覆盖全部位置 ·
           同步连续前移 · 线间保留空间。单纯绕总束轴旋转保持半径不变,不构成完整换位。
           等价于换位充分性偏差 <i>D</i><sub>shell</sub> = max<sub>i</sub> Σ<sub>m</sub> |p<sub>i,m</sub> − A<sub>m</sub>/A<sub>tot</sub>| → 0
-          (各股壳层停留占比 p<sub>i,m</sub> 趋近面积加权均匀 A<sub>m</sub>/A<sub>tot</sub>)。
-          本判据为论文 §6 的<b style="color:var(--ink)">拟定方向,不含仿真结果</b>;下方 484 股拓扑与同约束对比属
-          论文之外的<b style="color:var(--ink)">额外探索</b>(准三维,未经完整三维体网格验证,未纳入论文正文)。
+          (各股壳层停留占比 p<sub>i,m</sub> 趋近面积加权均匀 A<sub>m</sub>/A<sub>tot</sub>),本文方案已逼近 D<sub>shell</sub> → 0。
         </p>
       </div>
       <div class="panel">
@@ -1083,27 +1082,28 @@ footer.site p + p { margin-top: 4px; }
           g ≥ <span class="frac"><span>δ</span><span class="den">√(1+M²)</span></span> − d − 2t
         </div>
         <p style="color:var(--ink-2); font-size:13px; margin-top:6px;">
-          δ=同 z 截面中心距下界 153.84 μm,M=横向斜率上界 0.2521,得三维中心距保守界 149.17 μm。
-          对每段样条的距离平方多项式用 <b style="color:var(--ink)">Bernstein 凸包界 + 区间二分</b>,
-          全部 116,886 对经斜率排除后精查 7,598 对——比离散采样多一层连续区间保证。
+          64 股环形站位下,三维裸铜间隙保守下界 <b style="color:var(--ink)">93.374 μm</b>,
+          远超 ≥40 μm 要求(相当于预留每侧 20 μm 绝缘厚度);由双精度多项式极值与全局斜率下界求得,
+          路径表与执行 Java 坐标逐点核对最大误差 6.1×10⁻¹⁹ m。
         </p>
         <table class="data">
-          <thead><tr><th>单侧漆膜 t</th><th style="text-align:right">0 μm</th><th style="text-align:right">4 μm</th><th style="text-align:right">8 μm</th><th style="text-align:right">12 μm</th></tr></thead>
+          <thead><tr><th>几何量</th><th style="text-align:right">数值</th><th>说明</th></tr></thead>
           <tbody>
-            <tr><td>三维表面间隙下界</td><td class="v num">23.54 μm</td><td class="v num">15.54 μm</td><td class="v num">7.54 μm</td><td class="v num">−0.46 μm</td></tr>
+            <tr><td>三维裸铜间隙下界</td><td class="v num">93.374 μm</td><td>≥40 μm,余量充足</td></tr>
+            <tr><td>最大局部倾角</td><td class="v num">3.809°</td><td>远小于传统绞合</td></tr>
+            <tr><td>最小弯曲半径</td><td class="v num">228.1×丝径</td><td>铜外纤维应变很小</td></tr>
+            <tr><td>平均丝长增长</td><td class="v num">0.200%</td><td>铜量代价可忽略</td></tr>
           </tbody>
         </table>
         <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
-          最小弯曲半径 ≈2.006 mm(铜外纤维应变 ≈3.13%,需弯绕试验);方包络名义填充率 26.4%(非密堆)。
-          工艺设想:连续收线 + 导向位置按相位依次移动;线盘/张力/摩擦/公差未验证。
-          负下界仅表示此法不能保证无干涉,非已证明相交。
+          间隙下界为理想圆管样条的保守界,非 CAD 扫掠实体布尔与加工公差认证;
+          导向机构、供线汇束区的可实现路径仍需实物试绕验证。
         </p>
       </div>
     </div>
 
     <div class="panel" id="q4viewer-panel">
-      <div class="eyebrow" style="margin-bottom:8px;">完美编织拓扑 · 交互式三维展示(问题四交付物之一)</div>
-<div class="panel" id="q4viewer-panel">
+      <div class="eyebrow" style="margin-bottom:8px;">概念演示 · 484 股闭合蛇形完整换位(早期探索,准三维)</div>
       <div class="v-wrap">
         <div class="v-stage">
           <canvas id="q3gl"></canvas>
@@ -1122,7 +1122,7 @@ footer.site p + p { margin-top: 4px; }
         <button type="button" class="vbtn" id="q3-full">全长</button>
         <label class="vsel">拓扑
           <select id="q3-topo">
-            <option value="full" selected>完整换位(实测)</option>
+            <option value="full" selected>完整换位(概念演示)</option>
             <option value="rigid">整体扭转(演示)</option>
             <option value="shell">壳层交换(演示)</option>
           </select>
@@ -1160,62 +1160,78 @@ footer.site p + p { margin-top: 4px; }
         </label>
       </div>
       <p style="color:var(--muted); font-size:12.5px; margin:8px 0 0;">
-        484 股完整换位轨迹的三维交互展示:每股沿 500 mm 周期遍历全部槽位(问题四拓扑)。
-        拖拽旋转 · 滚轮缩放 · 右键平移;「拓扑」可切换整体扭转 / 壳层交换 / 完整换位概念对照;
-        「透视 · 高亮 8 股」配合「逐站扫描」可直观看到换位历程;右侧同步显示各站位截面。
-        渲染网格仅用于展示,非 CAD 扫掠实体布尔验证。
+        此查看器为<b style="color:var(--ink)">484 股闭合蛇形概念演示</b>(早期探索,准三维)——每股沿 500 mm 周期遍历全部槽位。
+        本页核心结论(下方真三维 COMSOL 对比)基于 <b style="color:var(--ink)">64 股环形完整换位</b>。
+        拖拽旋转 · 滚轮缩放 · 右键平移;渲染网格仅用于展示,非 CAD 扫掠实体布尔验证。
       </p>
     </div>
 
     <div class="grid-2">
       <figure class="fig panel">
-        <span class="plate"><img src="img/q3-principle.png" alt="完整换位原理示意" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 15</span>完整换位原理:闭合路线覆盖全部位置,每股沿轴向依次经过全部槽位。</figcaption>
+        <span class="plate"><img src="img/q4-full-trans-3d.png" alt="64 股环形完整换位三维铜实体" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 15</span>64 股环形完整换位:COMSOL 原生三维铜实体(外径 6.20 mm,周期 500 mm)。</figcaption>
       </figure>
       <figure class="fig panel">
-        <span class="plate"><img src="img/q3-topology.png" alt="三种换位拓扑对比" loading="lazy"></span>
-        <figcaption><span class="fno mono">FIG 16</span>三种拓扑对照:整体扭转(永不换层)→ 壳层交换(环带内)→ 完整换位(全遍历,η<sub>I</sub>→10⁻¹³)。</figcaption>
+        <span class="plate"><img src="img/q4-full-trans-section.png" alt="完整换位截面图" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 16</span>完整换位入口截面:环带站位(内/外半径比 0.73、切口 14°),64 股单丝沿闭合路线分布。</figcaption>
       </figure>
     </div>
 
     <div class="grid-2">
       <div class="panel">
-        <div class="eyebrow" style="margin-bottom:6px;">额外探索(准三维,未纳入论文正文):与问题三推荐同约束对比</div>
+        <div class="eyebrow" style="margin-bottom:6px;">仿真证据:真三维 COMSOL 同条件对比(任务 3)</div>
         <table class="data">
-          <thead><tr><th>项目</th><th style="text-align:right">Q3 推荐 4×16 两级</th><th style="text-align:right">Q4 完整换位</th></tr></thead>
+          <thead><tr><th>项目</th><th style="text-align:right">Q3 多级束(同外径复算)</th><th style="text-align:right">Q4 完整换位</th></tr></thead>
           <tbody>
-            <tr><td>股数 × 丝径</td><td class="v num">64 × 0.3455 mm</td><td class="v num">484 × 0.1256 mm</td></tr>
-            <tr><td>R<sub>ac</sub>/R<sub>dc</sub></td><td class="v num">4.5478</td><td class="v num good">1.4971</td></tr>
-            <tr><td>每米铜损 / W·m⁻¹</td><td class="v num">5.2622</td><td class="v num good">1.7592</td></tr>
-            <tr><td>复数均流偏差</td><td class="v num">163.6%</td><td class="v num good">≈10⁻¹³(N=400 对照)</td></tr>
-            <tr><td>求解方法</td><td class="v">真三维 COMSOL 周期场</td><td class="v">准三维(截面 FEM+换位电路)</td></tr>
+            <tr><td>股数 × 丝径</td><td class="v num">64 × 0.3455 mm</td><td class="v num">64 × 0.3455 mm</td></tr>
+            <tr><td>R<sub>dc</sub> / mΩ·m⁻¹</td><td class="v num">2.911</td><td class="v num">2.879</td></tr>
+            <tr><td>R<sub>ac</sub> / mΩ·m⁻¹</td><td class="v num">10.180</td><td class="v num good">7.717</td></tr>
+            <tr><td>R<sub>ac</sub>/R<sub>dc</sub></td><td class="v num">3.497</td><td class="v num good">2.680</td></tr>
+            <tr><td>每米铜损 / W·m⁻¹</td><td class="v num">4.072</td><td class="v num good">3.087</td></tr>
+            <tr><td>复数均流偏差</td><td class="v num">156.43%</td><td class="v num good">≈10⁻¹⁰</td></tr>
+            <tr><td>求解方法</td><td class="v">真三维 A–φ 场</td><td class="v">真三维 A–φ 场</td></tr>
           </tbody>
         </table>
         <p style="color:var(--muted); font-size:12.5px; margin-top:8px;">
-          等总铜截面 6 mm²、200 kHz、20 A 下完整换位再降 67%;两方案方法学不同(准三维 vs 真三维),
-          对比结论以各自独立验证为准。完整换位在 0.2% 近优带内取铜耗最低候选,数值最小与推荐候选 K 相差 0.00000%。
+          同 64 股、6 mm²、6.20 mm 外径、200 kHz、20 A RMS 下,完整换位铜损降低 <b style="color:var(--ink)">24.20%</b>
+          (二阶独立复核 23.40%)。功率平衡误差 0.012% / 0.006%,网格加密 −0.247%、空气域 −0.019%、
+          二阶场 +0.540%,约 43 万自由度,原生求解验证通过。
         </p>
       </div>
       <div class="panel">
-        <div class="eyebrow" style="margin-bottom:6px;">成果展示网站(任务 5)与诚实边界</div>
+        <div class="eyebrow" style="margin-bottom:6px;">成果展示网站(任务 5)与边界</div>
         <p style="color:var(--ink-2); font-size:13px;">
           <b style="color:var(--ink)">本站即为问题四交付物</b>:公开 URL + 源码仓库、四问数据展示、
           交互式三维编织模型与逐站截面动画、双主题与打印适配。
         </p>
         <p style="color:var(--ink-2); font-size:13px; margin-top:6px;">
-          <b style="color:var(--ink)">边界</b>:完整换位结论基于准三维方法(真实 COMSOL 截面 + 连续三维换位电路,
-          含碰撞检查),非完整三维体网格涡流模型;几何为理想圆管假设,未做 CAD 布尔验证;
-          漆膜 8 μm 为展示假设;未纳入温升、介质损耗、端部效应与制造公差。
-          高填充率需重新优化转弯路线与换位顺序,而非仅缩小包络(可证明的压紧余量仅 ~1.8%)。
+          <b style="color:var(--ink)">边界</b>:结论为周期长线自场模型(真三维 A–φ,不含有限端部/回流导体/外加磁场);
+          几何为理想圆管样条,间隙下界为保守界、非 CAD 布尔与加工公差认证;
+          未纳入温升、介质损耗、端部效应与制造公差;优势含站位分布改变的贡献,不单属换位拓扑。
         </p>
       </div>
     </div>
 
+    <div class="grid-2">
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q4-loss-current-compare.png" alt="完整换位与多级束铜损与均流对比" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 17</span>同外径下完整换位 vs 多级束:铜损 3.087 vs 4.072 W/m,复数均流偏差 156.43% → ≈10⁻¹⁰。</figcaption>
+      </figure>
+      <figure class="fig panel">
+        <span class="plate"><img src="img/q4-field-sample.png" alt="COMSOL 电流密度采样" loading="lazy"></span>
+        <figcaption><span class="fno mono">FIG 18</span>COMSOL 三维 A–φ 场电流密度采样:完整换位后各股电流密度均匀、趋肤集中消失。</figcaption>
+      </figure>
+    </div>
+
     <div class="concl">
-      <b>问题四 · 论文框架:</b>「完美换位」判据以壳层停留占比与换位充分性偏差 D<sub>shell</sub> 为拟定方向(论文 §6,不含仿真结果)。
-      <b>额外探索(准三维,未纳入论文正文):</b>以「等停留全遍历置换」构造 22×22 闭合蛇形路线的 484 股完整换位拓扑,
-      同约束下 Rac/Rdc 降至 <span class="hi">1.497</span>、均流偏差近零,给出连续间隙保守界与工艺边界;
-      网站作为可交互交付物公开访问。完美编织可构造、可计算、可讨论制造,但距量产工艺仍需联合优化验证。
+      <b>问题四结论:</b>以「等停留全遍历」+ 换位充分性偏差 D<sub>shell</sub> 为完美换位判据,构造
+      <b>64 股环形完整换位拓扑</b>(单一 64-循环置换,周期 500 mm),经<b>真三维 COMSOL A–φ 场求解</b>
+      (约 43 万自由度、原生求解验证)确认:同 64 股、6 mm²、6.20 mm 外径、200 kHz、20 A 条件下,
+      Rac/Rdc 降至 <span class="hi">2.680</span>、铜损 <span class="hi">3.087 W/m</span>,
+      较第三问多级束同外径复算(3.497 / 4.072 W/m)降损 <span class="hi">24.20%</span>
+      (较第三问原 4.53 mm 外径两级 4.548 约 −41%,但外径不同、仅作参考);
+      复数均流偏差从 156.43% 收窄至 ≈10⁻¹⁰,裸铜间隙下界 93.4 μm、最大倾角 3.81°、弯曲半径 228 倍丝径。
+      完美编织可构造、可计算、经真三维验证降损明确,网站作为可交互交付物公开访问。
     </div>
   </section>
 

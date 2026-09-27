@@ -141,17 +141,38 @@
   }
 
   function fmtF(f) { return f >= 1e6 ? (f / 1e6).toFixed(2) + ' MHz' : (f / 1e3).toFixed(0) + ' kHz'; }
-  function update() {
-    var f = Math.pow(10, parseFloat(slider.value));          // log 滑杆
-    drawDisc(f); drawCurve(f);
-    var d = deltaMM(f), ratio = racRatio(f);
-    out.innerHTML =
-      '<div class="sk-row"><span>f = <b class="num">' + fmtF(f) + '</b></span>' +
+  // 问题一为校验基准(非寻优),无“最优值”;标注全赛统一参考工况 200 kHz。
+  var REF_F = 2e5, REF_LOG = Math.log10(REF_F);              // ≈ 5.30103
+  function refRowHTML() {
+    var d = deltaMM(REF_F), ratio = racRatio(REF_F);
+    return '<div class="sk-row sk-refrow"><span class="sk-tag">参考工况</span>' +
+      '<span>f = <b class="num">200 kHz</b></span>' +
       '<span>δ = <b class="num">' + (d * 1000).toFixed(1) + ' μm</b></span>' +
       '<span>a/δ = <b class="num">' + (A_MM / d).toFixed(2) + '</b></span>' +
       '<span>R<sub>ac</sub>/R<sub>dc</sub> = <b class="num">' + ratio.toFixed(3) + '</b></span></div>';
   }
-  if (slider) slider.addEventListener('input', update);
+  function update() {
+    var f = Math.pow(10, parseFloat(slider.value));          // log 滑杆
+    drawDisc(f); drawCurve(f);
+    var d = deltaMM(f), ratio = racRatio(f);
+    var atRef = Math.abs(f - REF_F) / REF_F < 0.02;          // ±2% 视为参考工况
+    var badge = atRef ? ' <span class="sk-tag sk-tag-on">★ 参考工况</span>' : '';
+    out.innerHTML =
+      '<div class="sk-row"><span>f = <b class="num">' + fmtF(f) + '</b></span>' + badge +
+      '<span>δ = <b class="num">' + (d * 1000).toFixed(1) + ' μm</b></span>' +
+      '<span>a/δ = <b class="num">' + (A_MM / d).toFixed(2) + '</b></span>' +
+      '<span>R<sub>ac</sub>/R<sub>dc</sub> = <b class="num">' + ratio.toFixed(3) + '</b></span></div>' +
+      refRowHTML();
+  }
+  var refBtn = document.getElementById('skin-ref-btn');
+  if (refBtn) refBtn.addEventListener('click', function () {
+    slider.value = REF_LOG.toFixed(5);                       // 5.30103 → 200 kHz
+    update();
+  });
+  if (slider) {
+    slider.value = REF_LOG.toFixed(5);                       // 起步即精确 200 kHz
+    slider.addEventListener('input', update);
+  }
   window.addEventListener('themechange', update);
   update();
 })();

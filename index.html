@@ -295,6 +295,11 @@ footer.site { padding: 30px 0 46px; color: var(--muted); font-size: 12.5px; bord
 .sk-row b { color: var(--ink); }
 .sk-slider { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-2); }
 .sk-slider input[type="range"] { flex: 1; accent-color: var(--accent); }
+.sk-refbtn { flex: none; font: 12px ui-monospace, Menlo, monospace; padding: 3px 10px; border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.sk-refbtn:hover { background: var(--hairline); }
+.sk-tag { display: inline-block; font: 11px ui-monospace, Menlo, monospace; padding: 1px 7px; border: 1px solid var(--hairline); border-radius: 999px; color: var(--muted); vertical-align: middle; }
+.sk-tag-on { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+.sk-refrow { opacity: .82; border-top: 1px dashed var(--hairline); padding-top: 8px; }
 footer.site p + p { margin-top: 4px; }
 
 /* ============ 打印:强制浅色、隐藏交互件 ============ */
@@ -485,15 +490,17 @@ footer.site p + p { margin-top: 4px; }
         <div class="sk-right">
           <canvas id="skin-curve" height="200"></canvas>
           <div class="sk-slider">频率
-            <input type="range" id="skin-f" min="3" max="6" step="0.01" value="5.301" />
+            <input type="range" id="skin-f" min="3" max="6" step="0.001" value="5.301" />
             <span>1 kHz – 1 MHz</span>
+            <button type="button" id="skin-ref-btn" class="sk-refbtn">★ 回到 200 kHz</button>
           </div>
           <div class="sk-row" id="skin-out"></div>
         </div>
       </div>
       <p style="color:var(--muted); font-size:12.5px; margin:8px 0 0;">
         截面圆盘:颜色 = |J(r)|/|J(a)|(对数增强);白色虚环标记趋肤深度 δ。右侧为径向分布对数曲线。
-        拖动频率,观察电流层如何随 δ=√(2/ωμσ) 收缩——200 kHz 时 δ=147.8 μm、R<sub>ac</sub>/R<sub>dc</sub>=3.647,与问题一仿真一致。
+        拖动频率,观察电流层如何随 δ=√(2/ωμσ) 收缩。问题一为校验基准(非寻优),无"最优值"——
+        故标注全赛统一<b>参考工况 ★ 200 kHz</b>:δ=147.8 μm、a/δ=6.77、R<sub>ac</sub>/R<sub>dc</sub>=3.647,与问题一仿真一致。
       </p>
     </div>
 
@@ -1174,7 +1181,7 @@ footer.site p + p { margin-top: 4px; }
 <script src="data/q3ml-braid.js?v=1"></script>
 <script src="data/q2tw-braid.js?v=1"></script>
 <script src="mlviewer.js?v=4"></script>
-<script src="skinview.js?v=1"></script>
+<script src="skinview.js?v=2"></script>
 <script>
 window.addEventListener('DOMContentLoaded', function () {
   if (window.MountMLViewer && window.Q3ML_BRAID) {
